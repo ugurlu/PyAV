@@ -92,7 +92,7 @@ cdef class VideoStream(Stream):
         """
         
         # setup formatContext for encoding
-        self._weak_container().start_encoding()
+        self.container.start_encoding()
         
         if not self.reformatter:
             self.reformatter = VideoReformatter()

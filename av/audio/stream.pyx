@@ -69,7 +69,7 @@ cdef class AudioStream(Stream):
         packets until there are none left, at which it will return None.
         """
 
-        self._weak_container().start_encoding()
+        self.container.start_encoding()
         if not self.resampler:
             self.resampler = AudioResampler(
                 self.format,
