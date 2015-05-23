@@ -1,14 +1,13 @@
 cimport libav as lib
 from av.packet cimport Packet
-from av.container cimport Container, ContainerProxy
+from av.container cimport Container
 from av.frame cimport Frame
 from libc.stdint cimport int64_t
 
 cdef class Stream(object):
     
     # Stream attributes.
-    cdef ContainerProxy _container
-    cdef _weak_container
+    cdef readonly Container container
     
     cdef lib.AVStream *_stream
     cdef readonly dict metadata

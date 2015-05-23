@@ -22,11 +22,12 @@ cdef int pyio_read(void *opaque, uint8_t *buf, int buf_size) nogil:
         return pyio_read_gil(opaque, buf, buf_size)
 
 cdef int pyio_read_gil(void *opaque, uint8_t *buf, int buf_size):
-    cdef ContainerProxy self
+    cdef Container self
     cdef bytes res
     try:
-        self = <ContainerProxy>opaque
+        self = <Container>opaque
         res = self.fread(buf_size)
+        # TODO: Use low-level str API.
         memcpy(buf, <void*><char*>res, len(res))
         self.pos += len(res)
         if not res:
@@ -42,10 +43,10 @@ cdef int pyio_write(void *opaque, uint8_t *buf, int buf_size) nogil:
         return pyio_write_gil(opaque, buf, buf_size)
 
 cdef int pyio_write_gil(void *opaque, uint8_t *buf, int buf_size):
-    cdef ContainerProxy self
+    cdef Container self
     cdef int res
     try:
-        self = <ContainerProxy>opaque
+        self = <Container>opaque
         res = self.fwrite(buf[:buf_size])
         self.pos += res
         return res
@@ -64,9 +65,9 @@ cdef int64_t pyio_seek(void *opaque, int64_t offset, int whence) nogil:
         return pyio_seek_gil(opaque, offset, whence)
 
 cdef int pyio_seek_gil(void *opaque, int64_t offset, int whence):
-    cdef ContainerProxy self
+    cdef Container self
     try:
-        self = <ContainerProxy>opaque
+        self = <Container>opaque
         res = self.fseek(offset, whence)
 
         # Track the position for the user.
@@ -91,16 +92,55 @@ cdef int pyio_seek_gil(void *opaque, int64_t offset, int whence):
 cdef object _base_constructor_sentinel = object()
 
 
-cdef class ContainerProxy(object):
 
-    def __init__(self, sentinel, name, file, bint writeable):
+def open(file, mode='r', format=None, options=None):
+    """open(file, mode='r', format=None, options=None)
+
+    Main entrypoint to opening files/streams.
+
+    :param str file: The file to open.
+    :param str mode: ``"r"`` for reading and ``"w"`` for writing.
+    :param str format: Specific format to use. Defaults to autodect.
+    :param dict options: Options to pass to :c:func:`avformat_open_input`
+        (for reading) or :c:func:`avformat_write_header` (for writing).
+
+    For devices (via `libavdevice`), pass the name of the device to ``format``,
+    e.g.::
+
+        >>> # Open webcam on OS X.
+        >>> av.open(format='avfoundation', file='0') # doctest: skip
+
+    """
+    if mode == 'r':
+        return InputContainer(_base_constructor_sentinel, False, file, format, options)
+    if mode == 'w':
+        return OutputContainer(_base_constructor_sentinel, True, file, format, options)
+    raise ValueError("mode must be 'r' or 'w'; got %r" % mode)
+
+
+
+cdef class Container(object):
+
+    def __cinit__(self, sentinel, bint writeable, file, format_name, options):
 
         if sentinel is not _base_constructor_sentinel:
-            raise RuntimeError('cannot construct ContainerProxy')
+            raise RuntimeError('cannot construct Container')
+
+        if format_name is not None:
+            self.format = ContainerFormat(format_name)
+
+        if isinstance(file, basestring):
+            self.name = file
+        else:
+            self.file = file
+
+        if options is not None:
+            dict_to_avdict(&self.options, options)
+
+        self.streams = []
 
         self.local = local()
 
-        self.name = name
 
         self.writeable = writeable
         self.ptr = lib.avformat_alloc_context()
@@ -108,13 +148,11 @@ cdef class ContainerProxy(object):
         self.pos_is_valid = True
 
 
-        if file is not None:
-
-            self.file = file
-            self.fread = getattr(file, 'read', None)
-            self.fwrite = getattr(file, 'write', None)
-            self.fseek = getattr(file, 'seek', None)
-            self.ftell = getattr(file, 'tell', None)
+        if self.file is not None:
+            self.fread  = getattr(self.file, 'read', None)
+            self.fwrite = getattr(self.file, 'write', None)
+            self.fseek  = getattr(self.file, 'seek', None)
+            self.ftell  = getattr(self.file, 'tell', None)
 
             self.bufsize = 32 * 1024
             self.buffer = <unsigned char*> lib.av_malloc(self.bufsize)
@@ -135,6 +173,8 @@ cdef class ContainerProxy(object):
     def __dealloc__(self):
         with nogil:
 
+            lib.av_dict_free(&self.options)
+
             # Let FFmpeg handle it if it fully opened.
             if self.ptr and not self.writeable:
                 lib.avformat_close_input(&self.ptr)
@@ -145,8 +185,11 @@ cdef class ContainerProxy(object):
                     lib.av_freep(&self.buffer)
                 if self.iocontext:
                     lib.av_freep(&self.iocontext)
-    
-    cdef seek(self, int stream_index, lib.int64_t timestamp, str mode, bint backward, bint any_frame):
+
+    def __repr__(self):
+        return '<av.%s %r at 0x%x>' % (self.__class__.__name__, self.file or self.name, id(self))
+
+    cdef _seek(self, int stream_index, lib.int64_t timestamp, str mode, bint backward, bint any_frame):
 
         cdef int flags = 0
         cdef int ret
@@ -189,96 +232,46 @@ cdef class ContainerProxy(object):
         return err_check(value, filename=self.name)
 
 
-def open(file, mode='r', format=None, options=None):
-    """open(file, mode='r', format=None, options=None)
-
-    Main entrypoint to opening files/streams.
-
-    :param str file: The file to open.
-    :param str mode: ``"r"`` for reading and ``"w"`` for writing.
-    :param str format: Specific format to use. Defaults to autodect.
-    :param dict options: Options to pass to :c:func:`avformat_open_input`
-        (for reading) or :c:func:`avformat_write_header` (for writing).
-
-    For devices (via `libavdevice`), pass the name of the device to ``format``,
-    e.g.::
-
-        >>> # Open webcam on OS X.
-        >>> av.open(format='avfoundation', file='0') # doctest: SKIP
-
-    """
-    if mode == 'r':
-        return InputContainer(_base_constructor_sentinel, False, file, format, options)
-    if mode == 'w':
-        return OutputContainer(_base_constructor_sentinel, True, file, format, options)
-    raise ValueError("mode must be 'r' or 'w'; got %r" % mode)
-
-
-cdef class Container(object):
-
-    def __cinit__(self, sentinel, writing, file, format_name, options):
-
-        if sentinel is not _base_constructor_sentinel:
-            raise RuntimeError('cannot construct base Container')
-
-        if format_name is not None:
-            self.format = ContainerFormat(format_name)
-
-        if isinstance(file, basestring):
-            self.name = file
-            self.proxy = ContainerProxy(_base_constructor_sentinel, file, None, writing)
-        else:
-            self.file = file
-            self.proxy = ContainerProxy(_base_constructor_sentinel, None, file, writing)
-
-        if options is not None:
-            dict_to_avdict(&self.options, options)
-
-    def __dealloc__(self):
-        with nogil: lib.av_dict_free(&self.options)
-
-    def __repr__(self):
-        return '<av.%s %r>' % (self.__class__.__name__, self.file or self.name)
-
 
 cdef class InputContainer(Container):
     
     def __cinit__(self, *args, **kwargs):
 
-        cdef char *name = "" if self.proxy.file is not None else self.name
+        cdef char *name = "" if self.file is not None else self.name
         cdef lib.AVInputFormat *fmt = self.format.iptr if self.format else NULL
         with nogil:
             ret = lib.avformat_open_input(
-                &self.proxy.ptr,
+                &self.ptr,
                 name,
                 fmt,
                 &self.options if self.options else NULL
             )
-        self.proxy.err_check(ret)
+        self.err_check(ret)
 
-        self.format = self.format or build_container_format(self.proxy.ptr.iformat, self.proxy.ptr.oformat)
+        self.format = self.format or build_container_format(self.ptr.iformat, self.ptr.oformat)
 
         with nogil:
-            ret = lib.avformat_find_stream_info(self.proxy.ptr, NULL)
-        self.proxy.err_check(ret)
+            ret = lib.avformat_find_stream_info(self.ptr, NULL)
+        self.err_check(ret)
 
-        self.streams = list(
-            build_stream(self, self.proxy.ptr.streams[i])
-            for i in range(self.proxy.ptr.nb_streams)
+        self.streams.extend(
+            build_stream(self, self.ptr.streams[i])
+            for i in range(self.ptr.nb_streams)
         )
-        self.metadata = avdict_to_dict(self.proxy.ptr.metadata)
+
+        self.metadata = avdict_to_dict(self.ptr.metadata)
 
     property start_time:
-        def __get__(self): return self.proxy.ptr.start_time
+        def __get__(self): return self.ptr.start_time
     
     property duration:
-        def __get__(self): return self.proxy.ptr.duration
+        def __get__(self): return self.ptr.duration
     
     property bit_rate:
-        def __get__(self): return self.proxy.ptr.bit_rate
+        def __get__(self): return self.ptr.bit_rate
 
     property size:
-        def __get__(self): return lib.avio_size(self.proxy.ptr.pb)
+        def __get__(self): return lib.avio_size(self.ptr.pb)
 
     def demux(self, streams=None):
         """demux(streams=None)
@@ -293,7 +286,7 @@ cdef class InputContainer(Container):
         if isinstance(streams, Stream):
             streams = (streams, )
 
-        cdef bint *include_stream = <bint*>malloc(self.proxy.ptr.nb_streams * sizeof(bint))
+        cdef bint *include_stream = <bint*>malloc(self.ptr.nb_streams * sizeof(bint))
         if include_stream == NULL:
             raise MemoryError()
         
@@ -303,7 +296,7 @@ cdef class InputContainer(Container):
 
         try:
             
-            for i in range(self.proxy.ptr.nb_streams):
+            for i in range(self.ptr.nb_streams):
                 include_stream[i] = False
             for stream in streams:
                 include_stream[stream.index] = True
@@ -313,8 +306,8 @@ cdef class InputContainer(Container):
                 packet = Packet()
                 try:
                     with nogil:
-                        ret = lib.av_read_frame(self.proxy.ptr, &packet.struct)
-                    self.proxy.err_check(ret)
+                        ret = lib.av_read_frame(self.ptr, &packet.struct)
+                    self.err_check(ret)
                 except AVError:
                     break
                     
@@ -328,7 +321,7 @@ cdef class InputContainer(Container):
                         yield packet
 
             # Flush!
-            for i in range(self.proxy.ptr.nb_streams):
+            for i in range(self.ptr.nb_streams):
                 if include_stream[i]:
                     packet = Packet()
                     packet.stream = self.streams[i]
@@ -346,7 +339,7 @@ cdef class InputContainer(Container):
         """
         if isinstance(timestamp, float):
             timestamp = <long>(timestamp * lib.AV_TIME_BASE)
-        self.proxy.seek(-1, timestamp, mode, backward, any_frame)
+        self._seek(-1, timestamp, mode, backward, any_frame)
 
 
 cdef class OutputContainer(Container):
@@ -357,15 +350,14 @@ cdef class OutputContainer(Container):
         if not format:
             raise ValueError("Could not deduce output format")
 
-        self.proxy.err_check(lib.avformat_alloc_output_context2(
-            &self.proxy.ptr,
+        self.err_check(lib.avformat_alloc_output_context2(
+            &self.ptr,
             format,
             NULL,
             self.name,
         ))
 
-        self.format = self.format or build_container_format(self.proxy.ptr.iformat, self.proxy.ptr.oformat)
-        self.streams = []
+        self.format = self.format or build_container_format(self.ptr.iformat, self.ptr.oformat)
         self.metadata = {}
 
     def __del__(self):
@@ -408,15 +400,15 @@ cdef class OutputContainer(Container):
         
         # Assert that this format supports the requested codec.
         if not lib.avformat_query_codec(
-            self.proxy.ptr.oformat,
+            self.ptr.oformat,
             codec.id,
             lib.FF_COMPLIANCE_NORMAL,
         ):
             raise ValueError("%r format does not support %r codec" % (self.format.name, codec_name))
 
         # Create new stream in the AVFormatContext, set AVCodecContext values.
-        lib.avformat_new_stream(self.proxy.ptr, codec)
-        cdef lib.AVStream *stream = self.proxy.ptr.streams[self.proxy.ptr.nb_streams - 1]
+        lib.avformat_new_stream(self.ptr, codec)
+        cdef lib.AVStream *stream = self.ptr.streams[self.ptr.nb_streams - 1]
         cdef lib.AVCodecContext *codec_context = stream.codec # For readibility.
         lib.avcodec_get_context_defaults3(stream.codec, codec)
         stream.codec.codec = codec # Still have to manually set this though...
@@ -484,7 +476,7 @@ cdef class OutputContainer(Container):
             stream.time_base.den = codec_context.sample_rate
 
         # Some formats want stream headers to be separate
-        if self.proxy.ptr.oformat.flags & lib.AVFMT_GLOBALHEADER:
+        if self.ptr.oformat.flags & lib.AVFMT_GLOBALHEADER:
             codec_context.flags |= lib.CODEC_FLAG_GLOBAL_HEADER
         
         # Finally construct the user-land stream.
@@ -502,17 +494,17 @@ cdef class OutputContainer(Container):
         cdef Stream stream
         for stream in self.streams:
             if not lib.avcodec_is_open(stream._codec_context):
-                self.proxy.err_check(lib.avcodec_open2(stream._codec_context, stream._codec, NULL))
+                self.err_check(lib.avcodec_open2(stream._codec_context, stream._codec, NULL))
             dict_to_avdict(&stream._stream.metadata, stream.metadata, clear=True)
 
         # Open the output file, if needed.
         # TODO: is the avformat_write_header in the right place here?
-        if not self.proxy.ptr.pb:
-            if not self.proxy.ptr.oformat.flags & lib.AVFMT_NOFILE:
-                err_check(lib.avio_open(&self.proxy.ptr.pb, self.name, lib.AVIO_FLAG_WRITE))
-            dict_to_avdict(&self.proxy.ptr.metadata, self.metadata, clear=True)
+        if not self.ptr.pb:
+            if not self.ptr.oformat.flags & lib.AVFMT_NOFILE:
+                err_check(lib.avio_open(&self.ptr.pb, self.name, lib.AVIO_FLAG_WRITE))
+            dict_to_avdict(&self.ptr.metadata, self.metadata, clear=True)
             err_check(lib.avformat_write_header(
-                self.proxy.ptr, 
+                self.ptr, 
                 &self.options if self.options else NULL
             ))
 
@@ -524,21 +516,21 @@ cdef class OutputContainer(Container):
             return
         if not self._started:
             raise RuntimeError('not started')
-        if not self.proxy.ptr.pb:
+        if not self.ptr.pb:
             raise IOError("file not opened")
         
-        self.proxy.err_check(lib.av_write_trailer(self.proxy.ptr))
+        self.err_check(lib.av_write_trailer(self.ptr))
         cdef Stream stream
         for stream in self.streams:
             lib.avcodec_close(stream._codec_context)
             
-        if not self.proxy.ptr.oformat.flags & lib.AVFMT_NOFILE:
-            lib.avio_closep(&self.proxy.ptr.pb)
+        if not self.ptr.oformat.flags & lib.AVFMT_NOFILE:
+            lib.avio_closep(&self.ptr.pb)
 
         self._done = True
         
     def mux(self, Packet packet not None):
         self.start_encoding()
-        self.proxy.err_check(lib.av_interleaved_write_frame(self.proxy.ptr, &packet.struct))
+        self.err_check(lib.av_interleaved_write_frame(self.ptr, &packet.struct))
 
 

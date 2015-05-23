@@ -1,6 +1,5 @@
 from libc.stdint cimport uint8_t, int64_t
 from libc.string cimport memcpy
-from cpython cimport PyWeakref_NewRef
 
 cimport libav as lib
 
@@ -23,7 +22,7 @@ cdef Stream build_stream(Container container, lib.AVStream *c_stream):
     """
     
     # This better be the right one...
-    assert container.proxy.ptr.streams[c_stream.index] == c_stream
+    assert container.ptr.streams[c_stream.index] == c_stream
 
     cdef Stream py_stream
 
@@ -49,15 +48,14 @@ cdef class Stream(object):
 
     cdef _init(self, Container container, lib.AVStream *stream):
         
-        self._container = container.proxy        
-        self._weak_container = PyWeakref_NewRef(container, None)
+        self.container = container        
         self._stream = stream
         self._codec_context = stream.codec
         
         self.metadata = avdict_to_dict(stream.metadata)
         
         # This is an input container!
-        if self._container.ptr.iformat:
+        if self.container.ptr.iformat:
 
             # Find the codec.
             self._codec = lib.avcodec_find_decoder(self._codec_context.codec_id)
@@ -227,9 +225,9 @@ cdef class Stream(object):
         Seek to the keyframe at timestamp.
         """
         if isinstance(timestamp, float):
-            self._container.seek(-1, <long>(timestamp * lib.AV_TIME_BASE), mode, backward, any_frame)
+            self.container._seek(-1, <long>(timestamp * lib.AV_TIME_BASE), mode, backward, any_frame)
         else:
-            self._container.seek(self._stream.index, timestamp, mode, backward, any_frame)
+            self.container._seek(self._stream.index, timestamp, mode, backward, any_frame)
  
     cdef _setup_frame(self, Frame frame):
         # This PTS handling looks a little nuts, however it really seems like it

@@ -9,6 +9,9 @@ The Big Picture
 NEXT
 ====
 
+- break reference cycle by not storing streams as a Python object
+  - https://stackoverflow.com/questions/4501938/how-can-c-object-lifetimes-be-correctly-managed-in-cython
+
 - see do_streamcopy in ffmpeg/ffmpeg.c for hints about how to proceed for remuxing
 
 - expose various protocols as a Protocol descriptor?
