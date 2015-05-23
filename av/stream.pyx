@@ -1,6 +1,6 @@
 from libc.stdint cimport uint8_t, int64_t
 from libc.string cimport memcpy
-from cpython cimport PyWeakref_NewRef
+from cpython cimport Py_INCREF, Py_DECREF
 
 cimport libav as lib
 
@@ -49,14 +49,16 @@ cdef class Stream(object):
 
     cdef _init(self, Container container, lib.AVStream *stream):
         
-        self.container = container        
+        Py_INCREF(container)
+        self._container = <void*>container   
+
         self._stream = stream
         self._codec_context = stream.codec
         
         self.metadata = avdict_to_dict(stream.metadata)
         
         # This is an input container!
-        if self.container.ptr.iformat:
+        if container.ptr.iformat:
 
             # Find the codec.
             self._codec = lib.avcodec_find_decoder(self._codec_context.codec_id)
@@ -76,6 +78,7 @@ cdef class Stream(object):
             self._codec = self._codec_context.codec
 
     def __dealloc__(self):
+        Py_DECREF(<object>self._container)
         if self._codec:
             lib.avcodec_close(self._codec_context)
         if self._codec_options:

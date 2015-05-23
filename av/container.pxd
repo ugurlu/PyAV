@@ -37,7 +37,7 @@ cdef class Container(object):
     cdef readonly ContainerFormat format
     cdef lib.AVDictionary *options
 
-    cdef void* streams_ptr
+    cdef readonly list streams
     cdef readonly dict metadata
 
 

@@ -7,7 +7,7 @@ from libc.stdint cimport int64_t
 cdef class Stream(object):
     
     # Stream attributes.
-    cdef readonly Container container
+    cdef void* _container
     
     cdef lib.AVStream *_stream
     cdef readonly dict metadata

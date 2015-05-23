@@ -138,13 +138,6 @@ cdef class Container(object):
         if options is not None:
             dict_to_avdict(&self.options, options)
 
-        # We deal with the stream objects in this manner since we don't
-        # want the garbage collector to see this relationship as there is
-        # a reference cycle with deconstructors on each side.
-        streams = []
-        Py_INCREF(streams)
-        self.streams_ptr = <void*>streams
-
         self.local = local()
 
 
@@ -180,9 +173,6 @@ cdef class Container(object):
 
         print 'Container.__dealloc__'
 
-        # Need to handle this one manually.
-        Py_DECREF(<object>self.streams_ptr)
-
         with nogil:
 
             lib.av_dict_free(&self.options)
@@ -197,9 +187,6 @@ cdef class Container(object):
                     lib.av_freep(&self.buffer)
                 if self.iocontext:
                     lib.av_freep(&self.iocontext)
-
-    property streams:
-        def __get__(self): return <object>self.streams_ptr;
 
     def __repr__(self):
         return '<av.%s %r at 0x%x>' % (self.__class__.__name__, self.file or self.name, id(self))
@@ -269,10 +256,10 @@ cdef class InputContainer(Container):
             ret = lib.avformat_find_stream_info(self.ptr, NULL)
         self.err_check(ret)
 
-        self.streams.extend(
+        self.streams = [
             build_stream(self, self.ptr.streams[i])
             for i in range(self.ptr.nb_streams)
-        )
+        ]
 
         self.metadata = avdict_to_dict(self.ptr.metadata)
 
