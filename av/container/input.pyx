@@ -14,22 +14,23 @@ cdef class InputContainer(Container):
     def __cinit__(self, *args, **kwargs):
 
         cdef _Dictionary options = self.options.copy()
-        with nogil:
-            # This peeks are the first few frames to:
-            #   - set stream.disposition from codec.audio_service_type (not exposed);
-            #   - set stream.codec.bits_per_coded_sample;
-            #   - set stream.duration;
-            #   - set stream.start_time;
-            #   - set stream.r_frame_rate to average value;
-            #   - open and closes codecs with the options provided.
-            ret = lib.avformat_find_stream_info(
-                self.proxy.ptr,
-                # Our understanding is that there is little overlap bettween
-                # options for containers and streams, so we use the same dict.
-                # FIXME: This expects per-stream options.
-                &options.ptr
-            )
-        self.proxy.err_check(ret)
+        if not self.options.get('skip_stream_info', ''):
+            with nogil:
+                # This peeks are the first few frames to:
+                #   - set stream.disposition from codec.audio_service_type (not exposed);
+                #   - set stream.codec.bits_per_coded_sample;
+                #   - set stream.duration;
+                #   - set stream.start_time;
+                #   - set stream.r_frame_rate to average value;
+                #   - open and closes codecs with the options provided.
+                ret = lib.avformat_find_stream_info(
+                    self.proxy.ptr,
+                    # Our understanding is that there is little overlap bettween
+                    # options for containers and streams, so we use the same dict.
+                    # FIXME: This expects per-stream options.
+                    &options.ptr
+                )
+            self.proxy.err_check(ret)
 
         self.streams = StreamContainer()
         cdef int i

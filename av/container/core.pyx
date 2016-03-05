@@ -129,6 +129,9 @@ cdef class ContainerProxy(object):
             # We need the context before we open the input AND setup Python IO.
             self.ptr = lib.avformat_alloc_context()
 
+        cdef int64_t (*seeker)(void *, int64_t, int) nogil
+        seeker = NULL
+
         # Setup Python IO.
         if self.file is not None:
 
@@ -142,17 +145,20 @@ cdef class ContainerProxy(object):
             self.pos_is_valid = True
 
             # This is effectively the maximum size of reads.
-            self.bufsize = 32 * 1024
+            self.bufsize = int(container.options.get('bufsize', 32 * 1024))
             self.buffer = <unsigned char*>lib.av_malloc(self.bufsize)
 
-            bint seekable = bool(self.fseek and self.ftell)
+            seekable = container.options.get('seekable', True) and self.fseek and self.ftell
+            if seekable:
+                seeker = pyio_seek
+
             self.iocontext = lib.avio_alloc_context(
                 self.buffer, self.bufsize,
                 self.writeable, # Writeable.
                 <void*>self, # User data.
                 pyio_read,
                 pyio_write,
-                pyio_seek if seekable else NULL,
+                seeker,
             )
             # Various tutorials say that we should set AVFormatContext.direct
             # to AVIO_FLAG_DIRECT here, but that doesn't seem to do anything in
@@ -177,6 +183,7 @@ cdef class ContainerProxy(object):
             self.err_check(res)
 
     def __dealloc__(self):
+        return
         with nogil:
 
             # Let FFmpeg handle it if it fully opened.
