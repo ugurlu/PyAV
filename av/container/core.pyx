@@ -145,18 +145,19 @@ cdef class ContainerProxy(object):
             self.bufsize = 32 * 1024
             self.buffer = <unsigned char*>lib.av_malloc(self.bufsize)
 
+            bint seekable = bool(self.fseek and self.ftell)
             self.iocontext = lib.avio_alloc_context(
                 self.buffer, self.bufsize,
                 self.writeable, # Writeable.
                 <void*>self, # User data.
                 pyio_read,
                 pyio_write,
-                pyio_seek
+                pyio_seek if seekable else NULL,
             )
             # Various tutorials say that we should set AVFormatContext.direct
             # to AVIO_FLAG_DIRECT here, but that doesn't seem to do anything in
             # FFMpeg and was deprecated.
-            self.iocontext.seekable = lib.AVIO_SEEKABLE_NORMAL
+            self.iocontext.seekable = lib.AVIO_SEEKABLE_NORMAL if seekable else 0
             self.iocontext.max_packet_size = self.bufsize
             self.ptr.pb = self.iocontext
             #self.ptr.flags = lib.AVFMT_FLAG_CUSTOM_IO
