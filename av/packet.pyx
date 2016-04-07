@@ -1,21 +1,36 @@
+from libc.string cimport memcpy
+
+from av.utils cimport err_check
+
 
 cdef class Packet(object):
-    
+
     """A packet of encoded data within a :class:`~av.format.Stream`.
 
     This may, or may not include a complete object within a stream.
     :meth:`decode` must be called to extract encoded data.
 
     """
-    def __init__(self):
-        with nogil:
-            lib.av_init_packet(&self.struct)
-            self.struct.data = NULL
-            self.struct.size = 0
+    def __init__(self, input_=None):
+        cdef char *buf
+        cdef unsigned size
+        if input_ is None:
+            with nogil:
+                lib.av_init_packet(&self.struct)
+                self.struct.data = NULL
+                self.struct.size = 0
+        else:
+            buf = input_
+            size = len(input_)
+            err_check(lib.av_new_packet(&self.struct, size))
+            memcpy(self.struct.data, buf, size)
+            self.struct.size = size
+
+
 
     def __dealloc__(self):
         with nogil: lib.av_free_packet(&self.struct)
-    
+
     def __repr__(self):
         return '<av.%s of #%d, dts=%s, pts=%s at 0x%x>' % (
             self.__class__.__name__,
@@ -24,7 +39,7 @@ cdef class Packet(object):
             self.pts,
             id(self),
         )
-    
+
     # Buffer protocol.
     cdef size_t _buffer_size(self):
         return self.struct.size
@@ -60,11 +75,10 @@ cdef class Packet(object):
                 self.struct.dts = lib.AV_NOPTS_VALUE
             else:
                 self.struct.dts = v
-    
+
     property pos:
         def __get__(self): return None if self.struct.pos == -1 else self.struct.pos
     property size:
         def __get__(self): return self.struct.size
     property duration:
         def __get__(self): return None if self.struct.duration == lib.AV_NOPTS_VALUE else self.struct.duration
-

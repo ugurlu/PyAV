@@ -7,6 +7,17 @@ The Big Picture
 - Filters
 
 
+En/Decoding without Streams/Container
+=====================================
+
+ctx = CodecContext('flv1', 'w')
+ctx.encode(frame)
+ctx.decode(packet or data)
+
+
+
+
+
 Remuxing Without Transcoding
 ============================
 
@@ -143,5 +154,3 @@ runtime_library_dirs
     http://ffmpeg.org/pipermail/ffmpeg-devel/2011-February/104327.html
     http://pastebin.com/Aq8eDZw3/
     http://web.archiveorange.com/archive/v/yR2T4bybpYnYCUXmzAI5
-
-

@@ -22,13 +22,13 @@ cdef class InputContainer(Container):
             #   - set stream.start_time;
             #   - set stream.r_frame_rate to average value;
             #   - open and closes codecs with the options provided.
-            ret = lib.avformat_find_stream_info(
-                self.proxy.ptr,
+            ret = 0 #lib.avformat_find_stream_info(
+                #self.proxy.ptr,
                 # Our understanding is that there is little overlap bettween
                 # options for containers and streams, so we use the same dict.
                 # FIXME: This expects per-stream options.
-                &options.ptr
-            )
+                #&options.ptr
+            #)
         self.proxy.err_check(ret)
 
         self.streams = StreamContainer()
