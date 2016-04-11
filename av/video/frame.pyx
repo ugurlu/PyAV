@@ -2,7 +2,7 @@ from av.bytesource cimport ByteSource, bytesource
 from av.utils cimport err_check
 from av.video.format cimport get_video_format, VideoFormat
 from av.video.plane cimport VideoPlane
-
+from av cimport utils # MEMLEAK
 
 cdef object _cinit_bypass_sentinel
 
@@ -25,15 +25,18 @@ cdef class VideoFrame(Frame):
     """
 
     def __cinit__(self, width=0, height=0, format='yuv420p'):
-
+        utils.debug_enter('VideoFrame.__cinit__') # MEMLEAK
         if width is _cinit_bypass_sentinel:
+            utils.debug_exit() # MEMLEAK
             return
 
         cdef lib.AVPixelFormat c_format = lib.av_get_pix_fmt(format)
         if c_format < 0:
+            utils.debug_exit() # MEMLEAK
             raise ValueError('invalid format %r' % format)
 
         self._init(c_format, width, height)
+        utils.debug_exit() # MEMLEAK
 
     cdef _init(self, lib.AVPixelFormat format, unsigned int width, unsigned int height):
         cdef int buffer_size
@@ -76,7 +79,9 @@ cdef class VideoFrame(Frame):
         self._init_planes(VideoPlane)
 
     def __dealloc__(self):
+        utils.debug_enter('VideoFrame.__dealloc__') # MEMLEAK
         lib.av_freep(&self._buffer)
+        utils.debug_exit()
 
     def __repr__(self):
         return '<av.%s #%d, %s %dx%d at 0x%x>' % (
@@ -263,7 +268,7 @@ cdef class VideoFrame(Frame):
         """Get an RGB ``QImage`` of this frame.
 
         Any ``**kwargs`` are passed to :meth:`VideoFrame.reformat`.
-        
+
         Returns a ``(VideoFrame, QImage)`` tuple, where the ``QImage`` references
         the data in the ``VideoFrame``.
         """
@@ -301,5 +306,3 @@ cdef class VideoFrame(Frame):
         frame.planes[0].update(array)
 
         return frame
-
-

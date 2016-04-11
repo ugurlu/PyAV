@@ -10,6 +10,8 @@ from av.subtitles.stream cimport SubtitleStream
 from av.utils cimport err_check, avdict_to_dict, avrational_to_faction, to_avrational, media_type_to_string
 from av.video.stream cimport VideoStream
 
+from av cimport utils # MEMLEAK
+
 
 cdef object _cinit_bypass_sentinel = object()
 
@@ -21,7 +23,7 @@ cdef Stream build_stream(Container container, lib.AVStream *c_stream):
     called.
 
     """
-    
+
     # This better be the right one...
     assert container.proxy.ptr.streams[c_stream.index] == c_stream
 
@@ -41,21 +43,21 @@ cdef Stream build_stream(Container container, lib.AVStream *c_stream):
 
 
 cdef class Stream(object):
-    
+
     def __cinit__(self, name):
         if name is _cinit_bypass_sentinel:
             return
         raise RuntimeError('cannot manually instatiate Stream')
 
     cdef _init(self, Container container, lib.AVStream *stream):
-        
-        self._container = container.proxy        
+
+        self._container = container.proxy
         self._weak_container = PyWeakref_NewRef(container, None)
         self._stream = stream
         self._codec_context = stream.codec
-        
+
         self.metadata = avdict_to_dict(stream.metadata)
-        
+
         # This is an input container!
         if self._container.ptr.iformat:
 
@@ -63,7 +65,7 @@ cdef class Stream(object):
             self._codec = lib.avcodec_find_decoder(self._codec_context.codec_id)
             if self._codec == NULL:
                 return
-            
+
             # Open the codec.
             try:
                 err_check(lib.avcodec_open2(self._codec_context, self._codec, &self._codec_options))
@@ -71,7 +73,7 @@ cdef class Stream(object):
                 # Signal that we don't need to close it.
                 self._codec = NULL
                 raise
-            
+
         # This is an output container!
         else:
             self._codec = self._codec_context.codec
@@ -104,7 +106,7 @@ cdef class Stream(object):
     property long_name:
         def __get__(self):
             return self._codec.long_name if self._codec else None
-    
+
     property profile:
         def __get__(self):
             if self._codec and lib.av_get_profile_name(self._codec, self._codec_context.profile):
@@ -119,10 +121,10 @@ cdef class Stream(object):
         def __get__(self): return avrational_to_faction(&self._stream.time_base)
 
     property rate:
-        def __get__(self): 
+        def __get__(self):
             if self._codec_context:
                 return self._codec_context.ticks_per_frame * avrational_to_faction(&self._codec_context.time_base)
-    
+
     property average_rate:
         def __get__(self):
             return avrational_to_faction(&self._stream.avg_frame_rate)
@@ -151,7 +153,7 @@ cdef class Stream(object):
                 return self._codec_context.rc_max_rate
             else:
                 return None
-            
+
     property bit_rate_tolerance:
         def __get__(self):
             return self._codec_context.bit_rate_tolerance if self._codec_context else None
@@ -200,7 +202,9 @@ cdef class Stream(object):
                 packet.struct.data = NULL
                 packet.struct.size = 0
 
+            utils.debug_enter('Stream._decode_one') # MEMLEAK
             decoded = self._decode_one(&packet.struct, &data_consumed)
+            utils.debug_exit() # MEMLEAK
             packet.struct.data += data_consumed
             packet.struct.size -= data_consumed
 
@@ -228,7 +232,7 @@ cdef class Stream(object):
         packet.struct.size = original_size
 
         return decoded_objs
-    
+
     def seek(self, timestamp, mode='time', backward=True, any_frame=False):
         """
         Seek to the keyframe at timestamp.
@@ -237,7 +241,7 @@ cdef class Stream(object):
             self._container.seek(-1, <long>(timestamp * lib.AV_TIME_BASE), mode, backward, any_frame)
         else:
             self._container.seek(self._stream.index, timestamp, mode, backward, any_frame)
- 
+
     cdef _setup_frame(self, Frame frame):
         # This PTS handling looks a little nuts, however it really seems like it
         # is the way to go. The PTS from a packet is the correct one while
@@ -248,4 +252,3 @@ cdef class Stream(object):
 
     cdef _decode_one(self, lib.AVPacket *packet, int *data_consumed):
         raise NotImplementedError('base stream cannot decode packets')
-

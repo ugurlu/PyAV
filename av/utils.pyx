@@ -4,6 +4,7 @@ from fractions import Fraction
 from threading import local
 import sys
 import traceback
+import os
 
 cimport libav as lib
 
@@ -30,7 +31,7 @@ cdef object _local = local()
 cdef int _err_count = 0
 
 cdef int stash_exception(exc_info=None):
-    
+
     global _err_count
 
     existing = getattr(_local, 'exc_info', None)
@@ -48,7 +49,7 @@ cdef int stash_exception(exc_info=None):
 
 
 cdef int err_check(int res=0, str filename=None) except -1:
-    
+
     global _err_count
 
     # Check for stashed exceptions.
@@ -86,7 +87,7 @@ cdef int err_check(int res=0, str filename=None) except -1:
 
 
 cdef dict avdict_to_dict(lib.AVDictionary *input):
-    
+
     cdef lib.AVDictionaryEntry *element = NULL
     cdef dict output = {}
     while True:
@@ -135,7 +136,7 @@ cdef str media_type_to_string(lib.AVMediaType media_type):
 
     # There is a convenient lib.av_get_media_type_string(x), but it
     # doesn't exist in libav.
-            
+
     if media_type == lib.AVMEDIA_TYPE_VIDEO:
         return "video"
     elif media_type == lib.AVMEDIA_TYPE_AUDIO:
@@ -149,3 +150,76 @@ cdef str media_type_to_string(lib.AVMediaType media_type):
     else:
         return "unknown"
 
+
+
+
+# === DEBUGGING ===
+# =================
+
+cdef bint debug = bool(os.environ.get('PYAV_DEBUG'))
+cdef int _last_mem = 0
+
+cdef void _debug_add_to_stack(int delta):
+    _seen = set()
+    for name in _stack:
+        if name in _seen:
+            continue
+        _seen.add(name)
+        _cmem_usage.setdefault(name, []).append(delta)
+
+cdef int _debug_mem_delta():
+    global _last_mem
+    cdef int mem = _proc.memory_info().rss
+    cdef int delta = mem - _last_mem
+    _last_mem = mem
+    return delta
+
+cdef void debug_enter(str name):
+    if not debug:
+        return
+    delta = _debug_mem_delta()
+    _debug_add_to_stack(delta)
+    _stack.append(name)
+
+def _debug_enter(name):
+    debug_enter(name)
+
+cdef void debug_exit():
+    if not debug:
+        return
+    delta = _debug_mem_delta()
+    _debug_add_to_stack(delta)
+    name = _stack.pop()
+    _mem_usage.setdefault(name, []).append(delta)
+
+def _debug_exit():
+    debug_exit()
+
+def debug_report():
+    import csv
+    import sys
+
+    path = os.environ['PYAV_DEBUG'].strip()
+    fh = sys.stdout if path == '-' else open(path, 'w')
+    def writerow(row):
+        fh.write('%-40s, %4s, %9s, %12s, %9s\n' % row)
+        fh.flush()
+    writerow(('section', 'num', 'cum_mem', 'avg_mem', 'mem'))
+    for name, mems in sorted(_mem_usage.iteritems()):
+        cmems = _cmem_usage.get(name, [0])
+        writerow((
+            name,
+            len(mems),
+            sum(cmems),
+            '%.1f' % (float(sum(mems)) / len(mems)),
+            sum(mems),
+        ))
+
+if debug:
+    import atexit
+    import psutil
+    _proc = psutil.Process()
+    _mem_usage = {}
+    _cmem_usage = {}
+    _stack = []
+    atexit.register(debug_report)

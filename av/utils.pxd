@@ -20,3 +20,8 @@ cdef object av_frac_to_fraction(lib.AVFrac *input)
 
 
 cdef str media_type_to_string(lib.AVMediaType)
+
+
+
+cdef void debug_enter(str)
+cdef void debug_exit()

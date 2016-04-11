@@ -1,6 +1,8 @@
+from av cimport utils # MEMLEAK
+
 
 cdef class Packet(object):
-    
+
     """A packet of encoded data within a :class:`~av.format.Stream`.
 
     This may, or may not include a complete object within a stream.
@@ -8,14 +10,19 @@ cdef class Packet(object):
 
     """
     def __init__(self):
+        utils.debug_enter('Packet.__init__') # MEMLEAK
         with nogil:
             lib.av_init_packet(&self.struct)
             self.struct.data = NULL
             self.struct.size = 0
+        utils.debug_exit() # MEMLEAK
 
     def __dealloc__(self):
-        with nogil: lib.av_free_packet(&self.struct)
-    
+        utils.debug_enter('Packet.__dealloc__') # MEMLEAK
+        with nogil:
+            lib.av_free_packet(&self.struct)
+        utils.debug_exit() # MEMLEAK
+
     def __repr__(self):
         return '<av.%s of #%d, dts=%s, pts=%s at 0x%x>' % (
             self.__class__.__name__,
@@ -24,7 +31,7 @@ cdef class Packet(object):
             self.pts,
             id(self),
         )
-    
+
     # Buffer protocol.
     cdef size_t _buffer_size(self):
         return self.struct.size
@@ -60,11 +67,10 @@ cdef class Packet(object):
                 self.struct.dts = lib.AV_NOPTS_VALUE
             else:
                 self.struct.dts = v
-    
+
     property pos:
         def __get__(self): return None if self.struct.pos == -1 else self.struct.pos
     property size:
         def __get__(self): return self.struct.size
     property duration:
         def __get__(self): return None if self.struct.duration == lib.AV_NOPTS_VALUE else self.struct.duration
-

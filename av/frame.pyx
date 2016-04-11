@@ -4,18 +4,24 @@ from cpython cimport Py_INCREF, PyTuple_New, PyTuple_SET_ITEM
 
 from av.plane cimport Plane
 
+from av cimport utils # MEMLEAK
+
 
 cdef class Frame(object):
 
     """Frame Base Class"""
 
     def __cinit__(self, *args, **kwargs):
+        utils.debug_enter('Frame.__cinit__') # MEMLEAK
         with nogil:
             self.ptr = lib.av_frame_alloc()
+        utils.debug_exit() # MEMLEAK
 
     def __dealloc__(self):
+        utils.debug_enter('Frame.__dealloc__') # MEMLEAK
         with nogil:
             lib.av_frame_free(&self.ptr)
+        utils.debug_exit() # MEMLEAK
 
     def __repr__(self):
         return 'av.%s #%d at 0x%x>' % (
