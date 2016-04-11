@@ -66,6 +66,9 @@ cdef class Stream(object):
             if self._codec == NULL:
                 return
 
+            #print 'refcounted_frames', self._codec_context.refcounted_frames
+            #self._codec_context.refcounted_frames = 1
+
             # Open the codec.
             try:
                 err_check(lib.avcodec_open2(self._codec_context, self._codec, &self._codec_options))
@@ -73,6 +76,7 @@ cdef class Stream(object):
                 # Signal that we don't need to close it.
                 self._codec = NULL
                 raise
+
 
         # This is an output container!
         else:
@@ -171,6 +175,22 @@ cdef class Stream(object):
             return self._codec_context.thread_count
         def __set__(self, int value):
             self._codec_context.thread_count = value
+
+    property thread_type:
+        def __get__(self):
+            if self._codec_context.thread_type == lib.FF_THREAD_FRAME:
+                return 'frame'
+            elif self._codec_context.thread_type == lib.FF_THREAD_SLICE:
+                return 'slice'
+            else:
+                return self._codec_context.thread_type
+        def __set__(self, value):
+            if value == 'frame':
+                self._codec_context.thread_type = lib.FF_THREAD_FRAME
+            elif value == 'slice':
+                self._codec_context.thread_type = lib.FF_THREAD_SLICE
+            else:
+                raise ValueError('thread_type must be "frame" or "slice"', value)
 
     cpdef decode(self, Packet packet, int count=0):
         """Decode a list of :class:`.Frame` from the given :class:`.Packet`.

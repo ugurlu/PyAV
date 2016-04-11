@@ -1,20 +1,31 @@
 import resource
 import subprocess
 import os
+import math
+import gc
+import logging
+import time
 
 import psutil
 
-import av
 
+
+gc.disable()
+#logging.basicConfig()
 
 proc = psutil.Process()
 last = 0
 def tick():
     global last
     now = proc.memory_info().rss
-    print now
+    print '%.2f %d' % (math.log(now, 2), now)
     last = now
 
+
+print 'import av',
+tick()
+
+import av
 
 def make_ffv1_level1(number_of_frames):
 
@@ -55,12 +66,17 @@ def transcode_level1_to_level3():
 def decode_using_pyav():
 
     print 'Decoding using PyAV.'
-    ffv1_video = av.open('ffv1_level3.nut', 'r')
+    fh = av.open('ffv1_level3.nut', 'r')
+    for s in fh.streams:
+        print s, s.thread_type, s.thread_count
+        pass
+        #s.thread_count = 1
+        s.thread_type = 'frame'
 
 
     count = 0
 
-    packet_iter = ffv1_video.demux()
+    packet_iter = fh.demux()
     while True:
 
         av.utils._debug_enter('__main__.demux')
@@ -73,11 +89,15 @@ def decode_using_pyav():
 
         for frame in frames:
             count += 1
-            if count > 1000:
-                return
             print count,
             tick()
             del frame
+            if not count % 100:
+                pass
+                # time.sleep(0.001)
+            if count >= 50:
+                return
+
         del packet
 
 
@@ -91,6 +111,9 @@ if __name__ == '__main__':
 
     if not os.path.exists('ffv1_level3.nut'):
         transcode_level1_to_level3()
+
+    print 'START',
+    tick()
 
     av.utils._debug_enter('__main__')
     decode_using_pyav()

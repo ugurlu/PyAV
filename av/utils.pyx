@@ -165,7 +165,7 @@ cdef void _debug_add_to_stack(int delta):
         if name in _seen:
             continue
         _seen.add(name)
-        _cmem_usage.setdefault(name, []).append(delta)
+        _data[name]['cmem'] += delta
 
 cdef int _debug_mem_delta():
     global _last_mem
@@ -178,6 +178,8 @@ cdef void debug_enter(str name):
     if not debug:
         return
     delta = _debug_mem_delta()
+    _data.setdefault(name, {'mem': 0, 'cmem': 0, 'num': 0})
+    _data[name]['num'] += 1
     _debug_add_to_stack(delta)
     _stack.append(name)
 
@@ -190,7 +192,7 @@ cdef void debug_exit():
     delta = _debug_mem_delta()
     _debug_add_to_stack(delta)
     name = _stack.pop()
-    _mem_usage.setdefault(name, []).append(delta)
+    _data[name]['mem'] += delta
 
 def _debug_exit():
     debug_exit()
@@ -205,21 +207,19 @@ def debug_report():
         fh.write('%-40s, %4s, %9s, %12s, %9s\n' % row)
         fh.flush()
     writerow(('section', 'num', 'cum_mem', 'avg_mem', 'mem'))
-    for name, mems in sorted(_mem_usage.iteritems()):
-        cmems = _cmem_usage.get(name, [0])
+    for name, data in sorted(_data.iteritems()):
         writerow((
             name,
-            len(mems),
-            sum(cmems),
-            '%.1f' % (float(sum(mems)) / len(mems)),
-            sum(mems),
+            data['num'],
+            data['cmem'],
+            '%.1f' % (float(data['mem']) / data['num']),
+            data['mem'],
         ))
 
 if debug:
     import atexit
     import psutil
     _proc = psutil.Process()
-    _mem_usage = {}
-    _cmem_usage = {}
+    _data = {}
     _stack = []
     atexit.register(debug_report)
