@@ -41,11 +41,12 @@ cdef class VideoFrame(Frame):
     cdef _init(self, lib.AVPixelFormat format, unsigned int width, unsigned int height):
         cdef int buffer_size
         with nogil:
+
             self.ptr.width = width
             self.ptr.height = height
             self.ptr.format = format
 
-
+            # The user is asking for a buffer, so we need to make it.
             if width and height:
 
                 # Cleanup the old buffer.
@@ -53,12 +54,14 @@ cdef class VideoFrame(Frame):
 
                 # Get a new one.
                 buffer_size = lib.avpicture_get_size(format, width, height)
-                with gil: err_check(buffer_size)
+                with gil:
+                    err_check(buffer_size)
 
                 self._buffer = <uint8_t *>lib.av_malloc(buffer_size)
 
                 if not self._buffer:
-                    with gil: raise MemoryError("cannot allocate VideoFrame buffer")
+                    with gil:
+                        raise MemoryError("cannot allocate VideoFrame buffer")
 
                 # Attach the AVPicture to our buffer.
                 lib.avpicture_fill(

@@ -20,7 +20,7 @@ cdef class Packet(object):
     def __dealloc__(self):
         utils.debug_enter('Packet.__dealloc__') # MEMLEAK
         with nogil:
-            lib.av_free_packet(&self.struct)
+            lib.av_packet_unref(&self.struct)
         utils.debug_exit() # MEMLEAK
 
     def __repr__(self):

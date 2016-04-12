@@ -50,33 +50,35 @@ cdef int stash_exception(exc_info=None):
 
 cdef int err_check(int res=0, str filename=None) except -1:
 
-    global _err_count
+    # global _err_count
+    #
+    # # Check for stashed exceptions.
+    # if _err_count:
+    #     exc_info = getattr(_local, 'exc_info', None)
+    #     if exc_info is not None:
+    #         _err_count -= 1
+    #         _local.exc_info = None
+    #         raise exc_info[0], exc_info[1], exc_info[2]
 
-    # Check for stashed exceptions.
-    if _err_count:
-        exc_info = getattr(_local, 'exc_info', None)
-        if exc_info is not None:
-            _err_count -= 1
-            _local.exc_info = None
-            raise exc_info[0], exc_info[1], exc_info[2]
-
-    cdef bytes py_buffer
-    cdef char *c_buffer
+    # cdef bytes py_buffer
+    # cdef char *c_buffer
     if res < 0:
 
-        if res == PYAV_ERROR:
-            py_buffer = b'Error in PyAV callback'
-        else:
-            # This is kinda gross.
-            py_buffer = b"\0" * AV_ERROR_MAX_STRING_SIZE
-            c_buffer = py_buffer
-            lib.av_strerror(res, c_buffer, AV_ERROR_MAX_STRING_SIZE)
-            py_buffer = c_buffer
-
-        if filename:
-            raise AVError(-res, py_buffer.decode('latin1'), filename)
-        else:
-            raise AVError(-res, py_buffer.decode('latin1'))
+        raise AVError(-res, 'error')
+        #
+        # if res == PYAV_ERROR:
+        #     py_buffer = b'Error in PyAV callback'
+        # else:
+        #     # This is kinda gross.
+        #     py_buffer = b"\0" * AV_ERROR_MAX_STRING_SIZE
+        #     c_buffer = py_buffer
+        #     lib.av_strerror(res, c_buffer, AV_ERROR_MAX_STRING_SIZE)
+        #     py_buffer = c_buffer
+        #
+        # if filename:
+        #     raise AVError(-res, py_buffer.decode('latin1'), filename)
+        # else:
+        #     raise AVError(-res, py_buffer.decode('latin1'))
 
     return res
 

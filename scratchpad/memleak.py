@@ -10,7 +10,7 @@ import psutil
 
 
 
-gc.disable()
+#gc.disable()
 #logging.basicConfig()
 
 proc = psutil.Process()
@@ -66,10 +66,11 @@ def transcode_level1_to_level3():
 def decode_using_pyav():
 
     print 'Decoding using PyAV.'
-    fh = av.open('ffv1_level3.nut', 'r')
+    fh = av.open('ffv1_level3.nut', 'r', options={'refcounted_frames': '1'})
     for s in fh.streams:
         print s, s.thread_type, s.thread_count
         pass
+        print 'Thread count:', s.thread_count
         #s.thread_count = 1
         s.thread_type = 'frame'
 
@@ -91,14 +92,11 @@ def decode_using_pyav():
             count += 1
             print count,
             tick()
-            del frame
             if not count % 100:
-                pass
-                # time.sleep(0.001)
-            if count >= 50:
+                gc.collect()
+                #print 'GARBAGE:', gc.get_count(), len(gc.garbage)
+            if count >= 1000:
                 return
-
-        del packet
 
 
 
@@ -117,4 +115,7 @@ if __name__ == '__main__':
 
     av.utils._debug_enter('__main__')
     decode_using_pyav()
+    gc.collect()
     av.utils._debug_exit()
+
+    tick()

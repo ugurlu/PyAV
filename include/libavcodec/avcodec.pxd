@@ -95,7 +95,7 @@ cdef extern from "libavcodec/avcodec.pyav.h" nogil:
         int thread_count
         int thread_type
         int refcounted_frames
-        
+
         int profile
 
         AVFrame* coded_frame
@@ -191,9 +191,14 @@ cdef extern from "libavcodec/avcodec.pyav.h" nogil:
     # See: http://ffmpeg.org/doxygen/trunk/structAVFrame.html
     # This is a strict superset of AVPicture.
     cdef struct AVFrame:
+
         uint8_t **data
         int *linesize
         uint8_t **extended_data
+
+        AVBufferRef **buf
+        AVBufferRef **extended_buf
+        int nb_extended_buf
 
         int width
         int height

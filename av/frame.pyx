@@ -20,6 +20,7 @@ cdef class Frame(object):
     def __dealloc__(self):
         utils.debug_enter('Frame.__dealloc__') # MEMLEAK
         with nogil:
+            # Free unrefs AND frees.
             lib.av_frame_free(&self.ptr)
         utils.debug_exit() # MEMLEAK
 
@@ -68,32 +69,33 @@ cdef class Frame(object):
             self.time_base.den = value.denominator
 
     cdef _init_planes(self, cls=Plane):
-
-        # We need to detect which planes actually exist, but also contrain
-        # ourselves to the maximum plane count (as determined only by VideoFrames
-        # so far), in case the library implementation does not set the last
-        # plane to NULL.
-        cdef int max_plane_count = self._max_plane_count()
-        cdef int plane_count = 0
-        while plane_count < max_plane_count and self.ptr.extended_data[plane_count]:
-            plane_count += 1
-
-        self.planes = PyTuple_New(plane_count)
-        for i in range(plane_count):
-            # We are constructing this tuple manually, but since Cython does
-            # not understand reference stealing we must manually Py_INCREF
-            # so that when Cython Py_DECREFs it doesn't release our object.
-            plane = cls(self, i)
-            Py_INCREF(plane)
-            PyTuple_SET_ITEM(self.planes, i, plane)
+        pass
+        # # We need to detect which planes actually exist, but also contrain
+        # # ourselves to the maximum plane count (as determined only by VideoFrames
+        # # so far), in case the library implementation does not set the last
+        # # plane to NULL.
+        # cdef int max_plane_count = self._max_plane_count()
+        # cdef int plane_count = 0
+        # while plane_count < max_plane_count and self.ptr.extended_data[plane_count]:
+        #     plane_count += 1
+        #
+        # self.planes = PyTuple_New(plane_count)
+        # for i in range(plane_count):
+        #     # We are constructing this tuple manually, but since Cython does
+        #     # not understand reference stealing we must manually Py_INCREF
+        #     # so that when Cython Py_DECREFs it doesn't release our object.
+        #     plane = cls(self, i)
+        #     Py_INCREF(plane)
+        #     PyTuple_SET_ITEM(self.planes, i, plane)
 
     cdef int _max_plane_count(self):
         return INT_MAX
 
     cdef _copy_attributes_from(self, Frame other):
-        self.index = other.index
-        self.time_base = other.time_base
-        if self.ptr and other.ptr:
-            self.ptr.pkt_pts = other.ptr.pkt_pts
-            self.ptr.pkt_dts = other.ptr.pkt_dts
-            self.ptr.pts = other.ptr.pts
+        pass
+        # self.index = other.index
+        # self.time_base = other.time_base
+        # if self.ptr and other.ptr:
+        #     self.ptr.pkt_pts = other.ptr.pkt_pts
+        #     self.ptr.pkt_dts = other.ptr.pkt_dts
+        #     self.ptr.pts = other.ptr.pts

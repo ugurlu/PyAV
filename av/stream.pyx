@@ -67,6 +67,7 @@ cdef class Stream(object):
                 return
 
             #print 'refcounted_frames', self._codec_context.refcounted_frames
+            # We want to use refcounted frames.
             #self._codec_context.refcounted_frames = 1
 
             # Open the codec.
@@ -210,10 +211,10 @@ cdef class Stream(object):
         cdef int data_consumed = 0
         cdef list decoded_objs = []
 
-        cdef uint8_t *original_data = packet.struct.data
-        cdef int      original_size = packet.struct.size
+        # cdef uint8_t *original_data = packet.struct.data
+        # cdef int      original_size = packet.struct.size
 
-        cdef bint is_flushing = not (packet.struct.data and packet.struct.size)
+        cdef bint is_flushing = False #not (packet.struct.data and packet.struct.size)
 
         # Keep decoding while there is data.
         while is_flushing or packet.struct.size > 0:
@@ -246,29 +247,31 @@ cdef class Stream(object):
             # frames, e.g. during flushing.)
             elif not data_consumed:
                 break
-
-        # Restore the packet.
-        packet.struct.data = original_data
-        packet.struct.size = original_size
+        #
+        # # Restore the packet.
+        # packet.struct.data = original_data
+        # packet.struct.size = original_size
 
         return decoded_objs
 
     def seek(self, timestamp, mode='time', backward=True, any_frame=False):
-        """
-        Seek to the keyframe at timestamp.
-        """
-        if isinstance(timestamp, float):
-            self._container.seek(-1, <long>(timestamp * lib.AV_TIME_BASE), mode, backward, any_frame)
-        else:
-            self._container.seek(self._stream.index, timestamp, mode, backward, any_frame)
+        pass
+        # """
+        # Seek to the keyframe at timestamp.
+        # """
+        # if isinstance(timestamp, float):
+        #     self._container.seek(-1, <long>(timestamp * lib.AV_TIME_BASE), mode, backward, any_frame)
+        # else:
+        #     self._container.seek(self._stream.index, timestamp, mode, backward, any_frame)
 
     cdef _setup_frame(self, Frame frame):
+        pass
         # This PTS handling looks a little nuts, however it really seems like it
         # is the way to go. The PTS from a packet is the correct one while
         # decoding, and it is copied to pkt_pts during creation of a frame.
-        frame.ptr.pts = frame.ptr.pkt_pts
-        frame.time_base = self._stream.time_base
-        frame.index = self._codec_context.frame_number - 1
+        #frame.ptr.pts = frame.ptr.pkt_pts
+        # frame.time_base = self._stream.time_base
+        # frame.index = self._codec_context.frame_number - 1
 
     cdef _decode_one(self, lib.AVPacket *packet, int *data_consumed):
         raise NotImplementedError('base stream cannot decode packets')
