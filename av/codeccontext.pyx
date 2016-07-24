@@ -4,6 +4,7 @@ from cpython cimport PyWeakref_NewRef
 
 cimport libav as lib
 
+from av.codec cimport Codec
 from av.packet cimport Packet
 from av.utils cimport err_check, avdict_to_dict, avrational_to_faction, to_avrational, media_type_to_string
 
@@ -26,44 +27,39 @@ cdef Stream wrap_codec_context(lib.AVStream *c_ctx):
     # else:
     #     py_stream = Stream.__new__(Stream, _cinit_sentinel)
 
-    py_ctx = CodecContext(_cinit_sentinel)
+    py_ctx = CodecContext(_cinit_sentinel, None)
     py_ctx._init(c_ctx)
     return py_ctx
 
 
 cdef class CodecContext(object):
     
-    def __cinit__(self, name):
+    def __cinit__(self, name, mode=None):
+
+        # Something else is constructing us.
         if name is _cinit_sentinel:
             return
-        raise RuntimeError('cannot manually instatiate CodecContext')
 
-    cdef _init(self, lib.AVCodecContext *ptr):
-        
-        self._ptr = ptr
-        
-        if True: # TODO: Is this an input?!
-
-            # Find the codec.
-            self._codec = lib.avcodec_find_decoder(self._ptr.codec_id)
-            if self._codec == NULL:
-                return
-            
-            # Open the codec.
-            try:
-                err_check(lib.avcodec_open2(self._ptr, self._codec, &self._codec_options))
-            except:
-                # Signal that we don't need to close it.
-                self._codec = NULL
-                raise
-            
-        # This is an output container!
+        if isinstance(name, Codec):
+            self.codec = name
         else:
-            self._codec = self._ptr.codec
+            self.codec = Codec(name, mode)
+
+    @property
+    def is_open(self):
+        return lib.avcodec_is_open(self.ptr)
+
+    def open(self):
+
+        if lib.avcodec_is_open(self.ptr):
+            raise ValueError('is already open')
+
+        # TODO: Options
+        err_check(lib.avcodec_open2(self.ptr, self.codec.ptr))
 
     def __dealloc__(self):
-        if self._ptr:
-            lib.avcodec_close(self._ptr)
+        if self.ptr:
+            lib.avcodec_close(self.ptr)
 
     def __repr__(self):
         return '<av.%s #%d %s/%s at 0x%x>' % (
@@ -74,57 +70,57 @@ cdef class CodecContext(object):
         )
 
     property type:
-        def __get__(self): return media_type_to_string(self._ptr.codec_type)
+        def __get__(self): return media_type_to_string(self.ptr.codec_type)
 
     property name:
         def __get__(self):
-            return self._codec.name if self._codec else None
+            return self.codec.ptr.name if self.codec.ptr else None
 
     property long_name:
         def __get__(self):
-            return self._codec.long_name if self._codec else None
+            return self.codec.ptr.long_name if self.codec.ptr else None
     
     property profile:
         def __get__(self):
-            if self._codec and lib.av_get_profile_name(self._codec, self._ptr.profile):
-                return lib.av_get_profile_name(self._codec, self._ptr.profile)
+            if self.codec.ptr and lib.av_get_profile_name(self.codec.ptr, self.ptr.profile):
+                return lib.av_get_profile_name(self.codec.ptr, self.ptr.profile)
             else:
                 return None
 
     property time_base:
         def __get__(self):
-            return avrational_to_faction(&self._ptr.time_base)
+            return avrational_to_faction(&self.ptr.time_base)
 
     property rate:
         def __get__(self): 
-            return self._ptr.ticks_per_frame * avrational_to_faction(&self._ptr.time_base)
+            return self.ptr.ticks_per_frame * avrational_to_faction(&self.ptr.time_base)
 
     property bit_rate:
         def __get__(self):
-            return self._ptr.bit_rate if self._ptr and self._ptr.bit_rate > 0 else None
+            return self.ptr.bit_rate if self.ptr and self.ptr.bit_rate > 0 else None
         def __set__(self, int value):
-            self._ptr.bit_rate = value
+            self.ptr.bit_rate = value
 
     property max_bit_rate:
         def __get__(self):
-            if self._ptr and self._ptr.rc_max_rate > 0:
-                return self._ptr.rc_max_rate
+            if self.ptr and self.ptr.rc_max_rate > 0:
+                return self.ptr.rc_max_rate
             else:
                 return None
             
     property bit_rate_tolerance:
         def __get__(self):
-            return self._ptr.bit_rate_tolerance if self._ptr else None
+            return self.ptr.bit_rate_tolerance if self.ptr else None
         def __set__(self, int value):
-            self._ptr.bit_rate_tolerance = value
+            self.ptr.bit_rate_tolerance = value
 
     # TODO: Does it conceptually make sense that this is on streams, instead
     # of on the container?
     property thread_count:
         def __get__(self):
-            return self._ptr.thread_count
+            return self.ptr.thread_count
         def __set__(self, int value):
-            self._ptr.thread_count = value
+            self.ptr.thread_count = value
 
     cpdef decode(self, Packet packet, int count=0):
         """Decode a list of :class:`.Frame` from the given :class:`.Packet`.
@@ -138,7 +134,7 @@ cdef class CodecContext(object):
         if packet is None:
             raise TypeError('packet must not be None')
 
-        if not self._codec:
+        if not self.codec.ptr:
             raise ValueError('cannot decode unknown codec')
 
         cdef int data_consumed = 0
