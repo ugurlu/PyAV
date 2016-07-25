@@ -95,6 +95,8 @@ cdef class CodecContext(object):
         if not self.codec.ptr:
             raise ValueError('cannot decode unknown codec')
 
+        self.open(strict=False)
+
         cdef int data_consumed = 0
         cdef list decoded_objs = []
 
@@ -117,7 +119,7 @@ cdef class CodecContext(object):
             if decoded:
 
                 if isinstance(decoded, Frame):
-                    self._setup_frame(decoded)
+                    pass #self._setup_frame(decoded)
                 decoded_objs.append(decoded)
 
                 # Sometimes we will error if we try to flush the stream

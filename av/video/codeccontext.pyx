@@ -2,7 +2,7 @@ cimport libav as lib
 
 from av.codeccontext cimport CodecContext
 from av.frame cimport Frame
-from av.video.frame cimport VideoFrame
+from av.video.frame cimport VideoFrame, alloc_video_frame
 from av.video.reformatter cimport VideoReformatter
 from av.packet cimport Packet
 from av.utils cimport err_check
@@ -48,14 +48,14 @@ cdef class VideoCodecContext(CodecContext):
         #     # don't reformat if format matches
         #     pixel_format = frame.format
         #     if pixel_format.pix_fmt == self.format.pix_fmt and \
-        #                 frame.width == self._codec_context.width and frame.height == self._codec_context.height:
+        #                 frame.width == self.ptr.width and frame.height == self.ptr.height:
         #         formated_frame = frame
         #     else:
             
         #         frame.reformatter = self.reformatter
         #         formated_frame = frame._reformat(
-        #             self._codec_context.width,
-        #             self._codec_context.height,
+        #             self.ptr.width,
+        #             self.ptr.height,
         #             self.format.pix_fmt,
         #             lib.SWS_CS_DEFAULT,
         #             lib.SWS_CS_DEFAULT
@@ -76,7 +76,7 @@ cdef class VideoCodecContext(CodecContext):
         #         formated_frame.ptr.pts = lib.av_rescale_q(
         #             formated_frame.ptr.pts,
         #             formated_frame._time_base, #src
-        #             self._codec_context.time_base,
+        #             self.ptr.time_base,
         #         )
             
         #     # There is no pts, so create one.
@@ -96,20 +96,20 @@ cdef class VideoCodecContext(CodecContext):
 
         #     if packet.struct.pts != lib.AV_NOPTS_VALUE:
         #         packet.struct.pts = lib.av_rescale_q(packet.struct.pts, 
-        #                                                  self._codec_context.time_base,
+        #                                                  self.ptr.time_base,
         #                                                  self._stream.time_base)
         #     if packet.struct.dts != lib.AV_NOPTS_VALUE:
         #         packet.struct.dts = lib.av_rescale_q(packet.struct.dts, 
-        #                                              self._codec_context.time_base,
+        #                                              self.ptr.time_base,
         #                                              self._stream.time_base)
                 
         #     if packet.struct.duration != lib.AV_NOPTS_VALUE:
         #         packet.struct.duration = lib.av_rescale_q(packet.struct.duration, 
-        #                                              self._codec_context.time_base,
+        #                                              self.ptr.time_base,
         #                                              self._stream.time_base)
                 
-        #     if self._codec_context.coded_frame:
-        #         if self._codec_context.coded_frame.key_frame:
+        #     if self.ptr.coded_frame:
+        #         if self.ptr.coded_frame.key_frame:
         #             packet.struct.flags |= lib.AV_PKT_FLAG_KEY
                 
         #     packet.struct.stream_index = self._stream.index
@@ -117,3 +117,51 @@ cdef class VideoCodecContext(CodecContext):
 
             return packet
 
+        
+    cdef Frame _decode_one(self, lib.AVPacket *packet, int *data_consumed):
+        
+        # Create a frame if we don't have one ready.
+        if not self.next_frame:
+            self.next_frame = alloc_video_frame()
+
+        # Decode video into the frame.
+        cdef int completed_frame = 0
+        
+        cdef int result
+        
+        with nogil:
+            result = lib.avcodec_decode_video2(self.ptr, self.next_frame.ptr, &completed_frame, packet)
+        data_consumed[0] = err_check(result)
+        
+        if not completed_frame:
+            return
+        
+        # # Check if the frame size has changed so that we can always have a
+        # # SwsContext that is ready to go.
+        # if self.last_w != self.ptr.width or self.last_h != self.ptr.height:
+            
+        #     self.last_w = self.ptr.width
+        #     self.last_h = self.ptr.height
+            
+        #     self.buffer_size = lib.avpicture_get_size(
+        #         self.ptr.pix_fmt,
+        #         self.ptr.width,
+        #         self.ptr.height,
+        #     )
+            
+        #     # Create a new SwsContextProxy
+        #     self.reformatter = VideoReformatter()
+
+        # We are ready to send this one off into the world!
+        cdef VideoFrame frame = self.next_frame
+        self.next_frame = None
+        
+        # Tell frame to finish constructing user properties.
+        frame._init_properties()
+
+        # Share our SwsContext with the frames. Most of the time they will end
+        # up using the same settings as each other, so it makes sense to cache
+        # it like this.
+        # frame.reformatter = self.reformatter
+
+        return frame
