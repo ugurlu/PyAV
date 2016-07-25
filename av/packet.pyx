@@ -22,7 +22,7 @@ cdef class Packet(object):
     def __repr__(self):
         return '<av.%s of #%d, dts=%s, pts=%s at 0x%x>' % (
             self.__class__.__name__,
-            self.stream.index,
+            self.stream.index if self.stream else 0,
             self.dts,
             self.pts,
             id(self),

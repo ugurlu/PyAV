@@ -4,65 +4,66 @@ from cpython cimport PyWeakref_NewRef
 
 cimport libav as lib
 
-from av.codec cimport Codec
+from av.codec cimport Codec, wrap_codec
 from av.packet cimport Packet
 from av.utils cimport err_check, avdict_to_dict, avrational_to_faction, to_avrational, media_type_to_string
+
+from av.video.codeccontext cimport VideoCodecContext
 
 
 cdef object _cinit_sentinel = object()
 
 
-cdef Stream wrap_codec_context(lib.AVStream *c_ctx):
+cdef CodecContext wrap_codec_context(lib.AVCodecContext *c_ctx):
     """Build an av.CodecContext for an existing AVCodecContext."""
     
     cdef CodecContext py_ctx
 
     # TODO: This.
-    # if c_stream.codec.codec_type == lib.AVMEDIA_TYPE_VIDEO:
-    #    py_stream = VideoStream.__new__(VideoStream, _cinit_sentinel)
-    # elif c_stream.codec.codec_type == lib.AVMEDIA_TYPE_AUDIO:
-    #    py_stream = AudioStream.__new__(AudioStream, _cinit_sentinel)
-    # elif c_stream.codec.codec_type == lib.AVMEDIA_TYPE_SUBTITLE:
-    #     py_stream = SubtitleStream.__new__(SubtitleStream, _cinit_sentinel)
-    # else:
-    #     py_stream = Stream.__new__(Stream, _cinit_sentinel)
+    if c_ctx.codec_type == lib.AVMEDIA_TYPE_VIDEO:
+        py_ctx = VideoCodecContext(_cinit_sentinel)
+    else:
+        py_ctx = CodecContext(_cinit_sentinel)
 
-    py_ctx = CodecContext(_cinit_sentinel, None)
     py_ctx._init(c_ctx)
+
     return py_ctx
 
 
 cdef class CodecContext(object):
     
-    def __cinit__(self, name, mode=None):
+    @staticmethod
+    def create(codec, mode=None):
+        cdef Codec cy_codec = codec if isinstance(codec, Codec) else Codec(codec, mode)
+        cdef lib.AVCodecContext *c_ctx = lib.avcodec_alloc_context3(cy_codec.ptr)
+        return wrap_codec_context(c_ctx)
 
-        # Something else is constructing us.
-        if name is _cinit_sentinel:
-            return
+    def __cinit__(self, sentinel=None, *args, **kwargs):
+        if sentinel is not _cinit_sentinel:
+            raise RuntimeError('cannot instantiate CodecContext')
 
-        if isinstance(name, Codec):
-            self.codec = name
-        else:
-            self.codec = Codec(name, mode)
+    cdef _init(self, lib.AVCodecContext *ptr):
+        self.ptr = ptr
+        self.codec = wrap_codec(self.ptr.codec)
 
     @property
     def is_open(self):
         return lib.avcodec_is_open(self.ptr)
 
-    def open(self):
-
+    cpdef open(self, bint strict=True):
         if lib.avcodec_is_open(self.ptr):
-            raise ValueError('is already open')
-
+            if strict:
+                raise ValueError('is already open')
+            return
         # TODO: Options
-        err_check(lib.avcodec_open2(self.ptr, self.codec.ptr))
+        err_check(lib.avcodec_open2(self.ptr, self.codec.ptr, NULL))
 
     def __dealloc__(self):
         if self.ptr:
             lib.avcodec_close(self.ptr)
 
     def __repr__(self):
-        return '<av.%s #%d %s/%s at 0x%x>' % (
+        return '<av.%s %s/%s at 0x%x>' % (
             self.__class__.__name__,
             self.type or '<notype>',
             self.name or '<nocodec>',
@@ -70,57 +71,14 @@ cdef class CodecContext(object):
         )
 
     property type:
-        def __get__(self): return media_type_to_string(self.ptr.codec_type)
-
+        def __get__(self):
+            return self.codec.type
     property name:
         def __get__(self):
-            return self.codec.ptr.name if self.codec.ptr else None
+            return self.codec.name
 
-    property long_name:
-        def __get__(self):
-            return self.codec.ptr.long_name if self.codec.ptr else None
-    
-    property profile:
-        def __get__(self):
-            if self.codec.ptr and lib.av_get_profile_name(self.codec.ptr, self.ptr.profile):
-                return lib.av_get_profile_name(self.codec.ptr, self.ptr.profile)
-            else:
-                return None
-
-    property time_base:
-        def __get__(self):
-            return avrational_to_faction(&self.ptr.time_base)
-
-    property rate:
-        def __get__(self): 
-            return self.ptr.ticks_per_frame * avrational_to_faction(&self.ptr.time_base)
-
-    property bit_rate:
-        def __get__(self):
-            return self.ptr.bit_rate if self.ptr and self.ptr.bit_rate > 0 else None
-        def __set__(self, int value):
-            self.ptr.bit_rate = value
-
-    property max_bit_rate:
-        def __get__(self):
-            if self.ptr and self.ptr.rc_max_rate > 0:
-                return self.ptr.rc_max_rate
-            else:
-                return None
-            
-    property bit_rate_tolerance:
-        def __get__(self):
-            return self.ptr.bit_rate_tolerance if self.ptr else None
-        def __set__(self, int value):
-            self.ptr.bit_rate_tolerance = value
-
-    # TODO: Does it conceptually make sense that this is on streams, instead
-    # of on the container?
-    property thread_count:
-        def __get__(self):
-            return self.ptr.thread_count
-        def __set__(self, int value):
-            self.ptr.thread_count = value
+    cpdef encode(self, Frame frame=None):
+        pass
 
     cpdef decode(self, Packet packet, int count=0):
         """Decode a list of :class:`.Frame` from the given :class:`.Packet`.
@@ -182,6 +140,7 @@ cdef class CodecContext(object):
         return decoded_objs
     
  
-    cdef _decode_one(self, lib.AVPacket *packet, int *data_consumed):
+    cdef Frame _decode_one(self, lib.AVPacket *packet, int *data_consumed):
         raise NotImplementedError('base stream cannot decode packets')
-# 
+
+
