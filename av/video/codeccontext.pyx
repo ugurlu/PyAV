@@ -1,6 +1,6 @@
 cimport libav as lib
 
-from av.codeccontext cimport CodecContext
+from av.codec.context cimport CodecContext
 from av.frame cimport Frame
 from av.video.frame cimport VideoFrame, alloc_video_frame
 from av.video.reformatter cimport VideoReformatter
