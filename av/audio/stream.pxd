@@ -18,7 +18,7 @@ cdef class AudioStream(Stream):
 
     # For encoding.
     cdef AudioResampler resampler
-    cdef AudioFifo fifo
+    cdef readonly AudioFifo fifo
 
     cpdef encode(self, AudioFrame)
 

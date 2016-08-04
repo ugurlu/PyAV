@@ -173,6 +173,7 @@ cdef extern from "libavutil/channel_layout.h" nogil:
 cdef extern from "libavutil/audio_fifo.h" nogil:
 
     cdef struct AVAudioFifo:
+        # Incomplete type, so we can't refer to it outselves.
         pass
 
     cdef void av_audio_fifo_free(AVAudioFifo *af)

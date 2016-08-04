@@ -97,7 +97,13 @@ cdef class Packet(Buffer):
             self._time_base.den = value.denominator
 
     property pts:
-        def __get__(self): return None if self.struct.pts == lib.AV_NOPTS_VALUE else self.struct.pts
+        def __get__(self):
+            return None if self.struct.pts == lib.AV_NOPTS_VALUE else self.struct.pts
+        def __set__(self, v):
+            if v is None:
+                self.struct.pts = lib.AV_NOPTS_VALUE
+            else:
+                self.struct.pts = v
     
     property dts:
         def __get__(self):

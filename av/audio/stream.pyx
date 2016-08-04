@@ -88,9 +88,12 @@ cdef class AudioStream(Stream):
         if resampled_frame:
             self.fifo.write(resampled_frame)
             # print 'resampled_frame.ptr.pts', resampled_frame.ptr.pts
+            print '    fifo samples:', self.fifo.samples, 'of', self._codec_context.frame_size
 
         # Pull partial frames if we were requested to flush (via a None frame).
         cdef AudioFrame fifo_frame = self.fifo.read(self._codec_context.frame_size, partial=input_frame is None)
+
+        print '    fifo frame:', fifo_frame
 
         cdef Packet packet = Packet()
         cdef int got_packet = 0
@@ -111,7 +114,10 @@ cdef class AudioStream(Stream):
                     self._codec_context.sample_rate,
                     self._codec_context.frame_size,
                 )
-                
+        
+        if input_frame is not None and fifo_frame is None:
+            return
+        
         err_check(lib.avcodec_encode_audio2(
             self._codec_context,
             &packet.struct,
