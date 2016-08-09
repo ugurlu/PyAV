@@ -7,8 +7,8 @@ container = av.open('none:0',format="avfoundation")
 audio_stream = container.streams.get(audio=0)[0]
 
 #file container for output:
-out_container = av.open('test.mp4','w')
-out_stream = out_container.add_stream(codec_name='aac', rate=44100)
+out_container = av.open('test.mp4', 'w')
+out_stream = out_container.add_stream('aac', rate=44100)
 out_container.start_encoding()
 assert out_stream.time_base.denominator == 44100
 
@@ -30,7 +30,7 @@ for i, packet in enumerate(container.demux(audio_stream)):
             print '        new:', samples
             out_pack.pts = out_pack.dts = samples
             samples += 1024 # because we know this
-            out_container.mux(packet)
+            out_container.mux(out_pack)
 
     if i > 100:
         break
@@ -44,9 +44,9 @@ while True:
         out_pack.pts = out_pack.dts = samples
         samples += consumed
         try:
-            pass #out_container.mux(packet)
-        except:
-            break
+            out_container.mux(packet)
+        except Exception as e:
+            print e
     else:
         break
 
