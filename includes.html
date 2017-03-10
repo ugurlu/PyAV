@@ -1,0 +1,1546 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Wrapped C Types and Functions &#8212; PyAV 0.3,2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3,2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyAV 0.3,2 documentation" href="index.html" />
+    <link rel="prev" title="Hacking on PyAV" href="hacking.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hacking.html" title="Hacking on PyAV"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyAV 0.3,2 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="wrapped-c-types-and-functions">
+<h1>Wrapped C Types and Functions<a class="headerlink" href="#wrapped-c-types-and-functions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="libavcodec-avcodec-pyav-h">
+<h2><code class="docutils literal"><span class="pre">libavcodec/avcodec.pyav.h</span></code><a class="headerlink" href="#libavcodec-avcodec-pyav-h" title="Permalink to this headline">¶</a></h2>
+<dl class="var">
+<dt id="c.AV_NOPTS_VALUE">
+<code class="descname">AV_NOPTS_VALUE</code><a class="headerlink" href="#c.AV_NOPTS_VALUE" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.fifo.AudioFifo" title="av.audio.fifo.AudioFifo"><code class="xref py py-class docutils literal"><span class="pre">av.audio.fifo.AudioFifo.__cinit__</span></code></a></li>
+<li><a class="reference internal" href="api.html#av.frame.Frame.dts" title="av.frame.Frame.dts"><code class="xref py py-attr docutils literal"><span class="pre">av.frame.Frame.dts</span></code></a></li>
+<li><a class="reference internal" href="api.html#av.packet.Packet.duration" title="av.packet.Packet.duration"><code class="xref py py-attr docutils literal"><span class="pre">av.packet.Packet.duration</span></code></a></li>
+<li><a class="reference internal" href="api.html#av.frame.Frame.pts" title="av.frame.Frame.pts"><code class="xref py py-attr docutils literal"><span class="pre">av.frame.Frame.pts</span></code></a></li>
+<li><a class="reference internal" href="api.html#av.packet.Packet.stream" title="av.packet.Packet.stream"><code class="xref py py-attr docutils literal"><span class="pre">av.packet.Packet.stream</span></code></a></li>
+<li><a class="reference internal" href="api.html#av.frame.Frame.time" title="av.frame.Frame.time"><code class="xref py py-attr docutils literal"><span class="pre">av.frame.Frame.time</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__time.html#ga2eaefe702f95f619ea6f2d08afa01be1">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AV_CODEC_PROP_INTRA_ONLY">
+<code class="descname">AV_CODEC_PROP_INTRA_ONLY</code><a class="headerlink" href="#c.AV_CODEC_PROP_INTRA_ONLY" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.intra_only</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga70552a7d4d1803bc11be8e6c74529d24">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AV_CODEC_PROP_LOSSY">
+<code class="descname">AV_CODEC_PROP_LOSSY</code><a class="headerlink" href="#c.AV_CODEC_PROP_LOSSY" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.lossy</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga0bb6cb9b395a0f2345eb41ed990fbf9f">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AV_CODEC_PROP_LOSSLESS">
+<code class="descname">AV_CODEC_PROP_LOSSLESS</code><a class="headerlink" href="#c.AV_CODEC_PROP_LOSSLESS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.lossless</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga540358327f77f6b924ca25a712b7fdc1">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AV_CODEC_PROP_REORDER">
+<code class="descname">AV_CODEC_PROP_REORDER</code><a class="headerlink" href="#c.AV_CODEC_PROP_REORDER" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.reorder</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#gaf28f8da6f74d303c115635d696a318b6">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AV_CODEC_PROP_BITMAP_SUB">
+<code class="descname">AV_CODEC_PROP_BITMAP_SUB</code><a class="headerlink" href="#c.AV_CODEC_PROP_BITMAP_SUB" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.bitmap_sub</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#gac0dfb59ee63132c9a064696a741419f6">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AV_CODEC_PROP_TEXT_SUB">
+<code class="descname">AV_CODEC_PROP_TEXT_SUB</code><a class="headerlink" href="#c.AV_CODEC_PROP_TEXT_SUB" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.text_sub</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#gae1c276095faaece7c097f8fd9f1184db">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_DRAW_HORIZ_BAND">
+<code class="descname">CODEC_CAP_DRAW_HORIZ_BAND</code><a class="headerlink" href="#c.CODEC_CAP_DRAW_HORIZ_BAND" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.draw_horiz_band</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#gad976df2e31f4e9674d1382e72d0d0bf5">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_DR1">
+<code class="descname">CODEC_CAP_DR1</code><a class="headerlink" href="#c.CODEC_CAP_DR1" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.dr1</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga87f9d8826e1154b01d16c52561d98d98">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_TRUNCATED">
+<code class="descname">CODEC_CAP_TRUNCATED</code><a class="headerlink" href="#c.CODEC_CAP_TRUNCATED" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.truncated</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga8783bdc2c37a5b8a0862450a482b6816">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_HWACCEL">
+<code class="descname">CODEC_CAP_HWACCEL</code><a class="headerlink" href="#c.CODEC_CAP_HWACCEL" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.hwaccel</span></code></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_DELAY">
+<code class="descname">CODEC_CAP_DELAY</code><a class="headerlink" href="#c.CODEC_CAP_DELAY" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.delay</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#gad81abca6e6ea7e0ac25f328e7425698f">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_SMALL_LAST_FRAME">
+<code class="descname">CODEC_CAP_SMALL_LAST_FRAME</code><a class="headerlink" href="#c.CODEC_CAP_SMALL_LAST_FRAME" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.small_last_frame</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga256911836fcea40fb3d79c03d8ae73c6">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_HWACCEL_VDPAU">
+<code class="descname">CODEC_CAP_HWACCEL_VDPAU</code><a class="headerlink" href="#c.CODEC_CAP_HWACCEL_VDPAU" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.hwaccel_vdpau</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#gac32558730799f8aa3c36013e729f3a32">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_SUBFRAMES">
+<code class="descname">CODEC_CAP_SUBFRAMES</code><a class="headerlink" href="#c.CODEC_CAP_SUBFRAMES" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.subframes</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga6e996607a6c9605e880c351b8d0437ad">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_EXPERIMENTAL">
+<code class="descname">CODEC_CAP_EXPERIMENTAL</code><a class="headerlink" href="#c.CODEC_CAP_EXPERIMENTAL" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.experimental</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga4d8340893edcdf15fc859f8c6291db1e">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_CHANNEL_CONF">
+<code class="descname">CODEC_CAP_CHANNEL_CONF</code><a class="headerlink" href="#c.CODEC_CAP_CHANNEL_CONF" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.channel_conf</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga874b2baf9dd2bb3abff21bc77da6b9ba">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_NEG_LINESIZES">
+<code class="descname">CODEC_CAP_NEG_LINESIZES</code><a class="headerlink" href="#c.CODEC_CAP_NEG_LINESIZES" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.neg_linesizes</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga19dfa49f18ea643e695ee530d060f7de">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_FRAME_THREADS">
+<code class="descname">CODEC_CAP_FRAME_THREADS</code><a class="headerlink" href="#c.CODEC_CAP_FRAME_THREADS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.frame_threads</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#gaf7d97232f50d2c3aeb4bde978407f2da">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_SLICE_THREADS">
+<code class="descname">CODEC_CAP_SLICE_THREADS</code><a class="headerlink" href="#c.CODEC_CAP_SLICE_THREADS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.slice_threads</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga87252b1af7c5be41617ea5d61a05c5ac">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_PARAM_CHANGE">
+<code class="descname">CODEC_CAP_PARAM_CHANGE</code><a class="headerlink" href="#c.CODEC_CAP_PARAM_CHANGE" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.param_change</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#gacfc914c55131ea82907741fec6ccac98">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_AUTO_THREADS">
+<code class="descname">CODEC_CAP_AUTO_THREADS</code><a class="headerlink" href="#c.CODEC_CAP_AUTO_THREADS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.auto_threads</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga0629976ec9ecccbdd055f49f6ed7bf31">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_VARIABLE_FRAME_SIZE">
+<code class="descname">CODEC_CAP_VARIABLE_FRAME_SIZE</code><a class="headerlink" href="#c.CODEC_CAP_VARIABLE_FRAME_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.variable_frame_size</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#gaa2e644f74c8013e29ec51d6accc7ac1b">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_INTRA_ONLY">
+<code class="descname">CODEC_CAP_INTRA_ONLY</code><a class="headerlink" href="#c.CODEC_CAP_INTRA_ONLY" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.intra_only</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga306312513613989095d9b1abcdd68f26">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.CODEC_CAP_LOSSLESS">
+<code class="descname">CODEC_CAP_LOSSLESS</code><a class="headerlink" href="#c.CODEC_CAP_LOSSLESS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.codec.Codec.lossless</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#ga0d509737b1d687314ab97c7cebfd7ace">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avcodec_descriptor_get">
+const AVCodecDescriptor * <code class="descname">avcodec_descriptor_get</code><span class="sig-paren">(</span>enum AVCodecID<em>&nbsp;id</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avcodec_descriptor_get" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.codec.Codec.__cinit__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__misc.html#gac09f8ddc2d4b36c5a85c6befba0d0888">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avcodec_find_decoder_by_name">
+AVCodec * <code class="descname">avcodec_find_decoder_by_name</code><span class="sig-paren">(</span>const char<em>&nbsp;*name</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avcodec_find_decoder_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.codec.Codec.__cinit__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__decoding.html#ga776f2359007e8457799503068419e791">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avcodec_find_encoder_by_name">
+AVCodec * <code class="descname">avcodec_find_encoder_by_name</code><span class="sig-paren">(</span>const char<em>&nbsp;*name</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avcodec_find_encoder_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.codec.Codec.__cinit__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__encoding.html#gaa614ffc38511c104bdff4a3afa086d37">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt>
+const AVCodecDescriptor * <code class="descname">avcodec_descriptor_get</code><span class="sig-paren">(</span>enum AVCodecID<em>&nbsp;id</em><span class="sig-paren">)</span></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.codec.Codec.__cinit__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__misc.html#gac09f8ddc2d4b36c5a85c6befba0d0888">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_get_profile_name">
+const char * <code class="descname">av_get_profile_name</code><span class="sig-paren">(</span>const AVCodec<em>&nbsp;*codec</em>, int<em>&nbsp;profile</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_get_profile_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.stream.Stream.profile" title="av.stream.Stream.profile"><code class="xref py py-attr docutils literal"><span class="pre">av.stream.Stream.profile</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__misc.html#ga0dc4a8003d0818a235bde2d8fbe81e11">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avcodec_close">
+int <code class="descname">avcodec_close</code><span class="sig-paren">(</span>AVCodecContext<em>&nbsp;*avctx</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avcodec_close" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.stream.Stream" title="av.stream.Stream"><code class="xref py py-class docutils literal"><span class="pre">av.stream.Stream.__dealloc__</span></code></a></li>
+<li><code class="xref py py-func docutils literal"><span class="pre">av.container.output.OutputContainer.close()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#gaf4daa92361efb3523ef5afeb0b54077f">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_free_packet">
+void <code class="descname">av_free_packet</code><span class="sig-paren">(</span>AVPacket<em>&nbsp;*pkt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_free_packet" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.packet.Packet" title="av.packet.Packet"><code class="xref py py-class docutils literal"><span class="pre">av.packet.Packet.__dealloc__</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__packet.html#gae65881462e78f98b268f34661d921ee0">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_init_packet">
+void <code class="descname">av_init_packet</code><span class="sig-paren">(</span>AVPacket<em>&nbsp;*pkt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_init_packet" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.packet.Packet" title="av.packet.Packet"><code class="xref py py-class docutils literal"><span class="pre">av.packet.Packet.__init__</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__packet.html#gac9cb9756175b96e7441575803757fb73">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avsubtitle_free">
+void <code class="descname">avsubtitle_free</code><span class="sig-paren">(</span>AVSubtitle<em>&nbsp;*sub</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avsubtitle_free" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.subtitles.subtitle.SubtitleProxy.__dealloc__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavc__core.html#gaa2c3e02a761d9fc0c5c9b2340408c332">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavfilter-avfilter-h">
+<h2><code class="docutils literal"><span class="pre">libavfilter/avfilter.h</span></code><a class="headerlink" href="#libavfilter-avfilter-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.avfilter_pad_get_name">
+const char * <code class="descname">avfilter_pad_get_name</code><span class="sig-paren">(</span>const AVFilterPad<em>&nbsp;*pads</em>, int<em>&nbsp;pad_idx</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avfilter_pad_get_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.filter.pad.FilterPad.name</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi.html#ga2d69631bb24a0a2b7ac0e00fe1dfab3b">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avfilter_pad_get_type">
+enum AVMediaType <code class="descname">avfilter_pad_get_type</code><span class="sig-paren">(</span>const AVFilterPad<em>&nbsp;*pads</em>, int<em>&nbsp;pad_idx</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avfilter_pad_get_type" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.filter.pad.FilterPad.type</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi.html#ga2d241a0066fc3724ec3335e25bc3912e">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AVFILTER_FLAG_DYNAMIC_INPUTS">
+<code class="descname">AVFILTER_FLAG_DYNAMIC_INPUTS</code><a class="headerlink" href="#c.AVFILTER_FLAG_DYNAMIC_INPUTS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.filter.filter.Filter.dynamic_inputs</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi.html#gae6ed6c10a03508829bdf17560e3e10e5">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AVFILTER_FLAG_DYNAMIC_OUTPUTS">
+<code class="descname">AVFILTER_FLAG_DYNAMIC_OUTPUTS</code><a class="headerlink" href="#c.AVFILTER_FLAG_DYNAMIC_OUTPUTS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.filter.filter.Filter.dynamic_outputs</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi.html#ga1c5c173875bdbbbbaad943a5d951846d">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avfilter_get_by_name">
+const AVFilter * <code class="descname">avfilter_get_by_name</code><span class="sig-paren">(</span>const char<em>&nbsp;*name</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avfilter_get_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.filter.filter.Filter.__cinit__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi.html#gadd774ec49e50edf00158248e1bfe4ae6">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avfilter_init_str">
+int <code class="descname">avfilter_init_str</code><span class="sig-paren">(</span>AVFilterContext<em>&nbsp;*ctx</em>, const char<em>&nbsp;*args</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avfilter_init_str" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.filter.context.FilterContext.init()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi.html#ga0d21eb00b9f24213bd7c5775393a09fd">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avfilter_init_dict">
+int <code class="descname">avfilter_init_dict</code><span class="sig-paren">(</span>AVFilterContext<em>&nbsp;*ctx</em>, AVDictionary<em>&nbsp;**options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avfilter_init_dict" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.filter.context.FilterContext.init()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi.html#ga8c15af28902395399fe455f6f8236848">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavfilter-avfiltergraph-h">
+<h2><code class="docutils literal"><span class="pre">libavfilter/avfiltergraph.h</span></code><a class="headerlink" href="#libavfilter-avfiltergraph-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.avfilter_graph_alloc">
+AVFilterGraph * <code class="descname">avfilter_graph_alloc</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.avfilter_graph_alloc" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.filter.graph.Graph.__cinit__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi.html#ga6c778454b86f845805ffd814b4ce51d4">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avfilter_graph_free">
+void <code class="descname">avfilter_graph_free</code><span class="sig-paren">(</span>AVFilterGraph<em>&nbsp;**graph</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avfilter_graph_free" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.filter.graph.Graph.__dealloc__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi.html#ga871684449dac05050df238a18d0d493b">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avfilter_graph_alloc_filter">
+AVFilterContext * <code class="descname">avfilter_graph_alloc_filter</code><span class="sig-paren">(</span>AVFilterGraph<em>&nbsp;*graph</em>, const AVFilter<em>&nbsp;*filter</em>, const char<em>&nbsp;*name</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avfilter_graph_alloc_filter" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.filter.graph.Graph.add()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi.html#gaa9af17ecf4c5c87307b57cf08411088b">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avfilter_link">
+int <code class="descname">avfilter_link</code><span class="sig-paren">(</span>AVFilterContext<em>&nbsp;*src</em>, unsigned<em>&nbsp;srcpad</em>, AVFilterContext<em>&nbsp;*dst</em>, unsigned<em>&nbsp;dstpad</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avfilter_link" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.filter.context.FilterContext.link_to()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi.html#gabc6247ebae2c591e768c8555174402f1">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavfilter-buffersink-h">
+<h2><code class="docutils literal"><span class="pre">libavfilter/buffersink.h</span></code><a class="headerlink" href="#libavfilter-buffersink-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.av_buffersink_get_frame">
+int <code class="descname">av_buffersink_get_frame</code><span class="sig-paren">(</span>AVFilterContext<em>&nbsp;*ctx</em>, AVFrame<em>&nbsp;*frame</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_buffersink_get_frame" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.filter.context.FilterContext.pull()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi__buffersink.html#ga653228f4cbca427c654d844a5fc59cfa">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavfilter-buffersrc-h">
+<h2><code class="docutils literal"><span class="pre">libavfilter/buffersrc.h</span></code><a class="headerlink" href="#libavfilter-buffersrc-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.av_buffersrc_write_frame">
+int <code class="descname">av_buffersrc_write_frame</code><span class="sig-paren">(</span>AVFilterContext<em>&nbsp;*ctx</em>, const AVFrame<em>&nbsp;*frame</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_buffersrc_write_frame" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.filter.context.FilterContext.push()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavfi__buffersrc.html#ga98515c064f012e4d6c8a72830170935e">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavformat-avformat-pyav-h">
+<h2><code class="docutils literal"><span class="pre">libavformat/avformat.pyav.h</span></code><a class="headerlink" href="#libavformat-avformat-pyav-h" title="Permalink to this headline">¶</a></h2>
+<dl class="var">
+<dt id="c.AV_TIME_BASE">
+<code class="descname">AV_TIME_BASE</code><a class="headerlink" href="#c.AV_TIME_BASE" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.container.input.InputContainer.seek()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__time.html#gaa11ed202b70e1f52bac809811a910e2a">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_register_all">
+void <code class="descname">av_register_all</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.av_register_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize all formats.</p>
+<dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__core.html#ga917265caec45ef5a0646356ed1a507e3">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avformat_network_init">
+int <code class="descname">avformat_network_init</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.avformat_network_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize network use in formats.</p>
+<dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__core.html#ga84542023693d61e8564c5d457979c932">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AVIO_SEEKABLE_NORMAL">
+<code class="descname">AVIO_SEEKABLE_NORMAL</code><a class="headerlink" href="#c.AVIO_SEEKABLE_NORMAL" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.core.ContainerProxy.__init__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/avio_8h.html#a03ea0dfa113a05f4843bbfff69e0cd0a">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avio_alloc_context">
+AVIOContext * <code class="descname">avio_alloc_context</code><span class="sig-paren">(</span>unsigned char<em>&nbsp;*buffer</em>, int<em>&nbsp;buffer_size</em>, int<em>&nbsp;write_flag</em>, void<em>&nbsp;*opaque</em>, int(*read_packet<span class="sig-paren">)</span><a class="headerlink" href="#c.avio_alloc_context" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.core.ContainerProxy.__init__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/aviobuf_8c.html#a853f5149136a27ffba3207d8520172a5">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AVFMT_NOFILE">
+<code class="descname">AVFMT_NOFILE</code><a class="headerlink" href="#c.AVFMT_NOFILE" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.container.output.OutputContainer.close()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/avformat_8h.html#a752cce390d480521919aa5d8be24ac0b">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AVFMT_FLAG_GENPTS">
+<code class="descname">AVFMT_FLAG_GENPTS</code><a class="headerlink" href="#c.AVFMT_FLAG_GENPTS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.core.ContainerProxy.__init__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/avformat_8h.html#a69e2c8bc119c0245ff6092f9db4d12ae">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_find_input_format">
+AVInputFormat * <code class="descname">av_find_input_format</code><span class="sig-paren">(</span>const char<em>&nbsp;*short_name</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_find_input_format" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.format.ContainerFormat" title="av.format.ContainerFormat"><code class="xref py py-class docutils literal"><span class="pre">av.format.ContainerFormat.__cinit__</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__decoding.html#ga7d2f532c6653c2419b17956712fdf3da">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_oformat_next">
+AVOutputFormat * <code class="descname">av_oformat_next</code><span class="sig-paren">(</span>const AVOutputFormat<em>&nbsp;*f</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_oformat_next" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.format.ContainerFormat" title="av.format.ContainerFormat"><code class="xref py py-class docutils literal"><span class="pre">av.format.ContainerFormat.__cinit__</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__core.html#ga8fe016b9e8df67a5ffde855f2f891d71">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avformat_alloc_context">
+AVFormatContext * <code class="descname">avformat_alloc_context</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.avformat_alloc_context" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.core.ContainerProxy.__init__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__core.html#gac7a91abf2f59648d995894711f070f62">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avformat_open_input">
+int <code class="descname">avformat_open_input</code><span class="sig-paren">(</span>AVFormatContext<em>&nbsp;**ps</em>, const char<em>&nbsp;*filename</em>, AVInputFormat<em>&nbsp;*fmt</em>, AVDictionary<em>&nbsp;**options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avformat_open_input" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.core.ContainerProxy.__init__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__decoding.html#ga10a404346c646e4ab58f4ed798baca32">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avformat_close_input">
+void <code class="descname">avformat_close_input</code><span class="sig-paren">(</span>AVFormatContext<em>&nbsp;**s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avformat_close_input" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.core.ContainerProxy.__dealloc__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__decoding.html#gae804b99aec044690162b8b9b110236a4">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_write_trailer">
+int <code class="descname">av_write_trailer</code><span class="sig-paren">(</span>AVFormatContext<em>&nbsp;*s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_write_trailer" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.container.output.OutputContainer.close()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__encoding.html#ga7f14007e7dc8f481f054b21614dfec13">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_interleaved_write_frame">
+int <code class="descname">av_interleaved_write_frame</code><span class="sig-paren">(</span>AVFormatContext<em>&nbsp;*s</em>, AVPacket<em>&nbsp;*pkt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_interleaved_write_frame" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.container.output.OutputContainer.mux()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__encoding.html#ga37352ed2c63493c38219d935e71db6c1">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avio_size">
+int64_t <code class="descname">avio_size</code><span class="sig-paren">(</span>AVIOContext<em>&nbsp;*s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avio_size" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.container.input.InputContainer.size</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/aviobuf_8c.html#a375f057e315dd2273579555128a070fb">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_guess_format">
+AVOutputFormat * <code class="descname">av_guess_format</code><span class="sig-paren">(</span>const char<em>&nbsp;*short_name</em>, const char<em>&nbsp;*filename</em>, const char<em>&nbsp;*mime_type</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_guess_format" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.core.ContainerProxy.__init__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__encoding.html#ga8795680bd7489e96eeb5aef5e615cacc">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avio_closep">
+int <code class="descname">avio_closep</code><span class="sig-paren">(</span>AVIOContext<em>&nbsp;**s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avio_closep" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.container.output.OutputContainer.close()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/aviobuf_8c.html#ae118a1f37f1e48617609ead9910aac15">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avformat_find_stream_info">
+int <code class="descname">avformat_find_stream_info</code><span class="sig-paren">(</span>AVFormatContext<em>&nbsp;*ic</em>, AVDictionary<em>&nbsp;**options</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avformat_find_stream_info" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.input.InputContainer.__cinit__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__decoding.html#gad42172e27cddafb81096939783b157bb">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.avformat_alloc_output_context2">
+int <code class="descname">avformat_alloc_output_context2</code><span class="sig-paren">(</span>AVFormatContext<em>&nbsp;**avctx</em>, AVOutputFormat<em>&nbsp;*oformat</em>, const char<em>&nbsp;*format</em>, const char<em>&nbsp;*filename</em><span class="sig-paren">)</span><a class="headerlink" href="#c.avformat_alloc_output_context2" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.core.ContainerProxy.__init__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/mux_8c.html#a362281b46aba7bbcd154f4a6aa8b64fc">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_read_frame">
+int <code class="descname">av_read_frame</code><span class="sig-paren">(</span>AVFormatContext<em>&nbsp;*s</em>, AVPacket<em>&nbsp;*pkt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_read_frame" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.container.input.InputContainer.demux()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavf__decoding.html#ga4fdb3084415a82e3810de6ee60e46a61">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavutil-audio-fifo-h">
+<h2><code class="docutils literal"><span class="pre">libavutil/audio_fifo.h</span></code><a class="headerlink" href="#libavutil-audio-fifo-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.av_audio_fifo_free">
+void <code class="descname">av_audio_fifo_free</code><span class="sig-paren">(</span>AVAudioFifo<em>&nbsp;*af</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_audio_fifo_free" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.fifo.AudioFifo" title="av.audio.fifo.AudioFifo"><code class="xref py py-class docutils literal"><span class="pre">av.audio.fifo.AudioFifo.__dealloc__</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__audiofifo.html#ga74e029e47f7aa99217ad1f315c434875">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_audio_fifo_size">
+int <code class="descname">av_audio_fifo_size</code><span class="sig-paren">(</span>AVAudioFifo<em>&nbsp;*af</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_audio_fifo_size" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.fifo.AudioFifo.samples" title="av.audio.fifo.AudioFifo.samples"><code class="xref py py-attr docutils literal"><span class="pre">av.audio.fifo.AudioFifo.samples</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__audiofifo.html#gaa0a4742ecac52a999e8b4478d27f3b9b">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavutil-avutil-pyav-h">
+<h2><code class="docutils literal"><span class="pre">libavutil/avutil.pyav.h</span></code><a class="headerlink" href="#libavutil-avutil-pyav-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.av_malloc">
+void * <code class="descname">av_malloc</code><span class="sig-paren">(</span>size_t<em>&nbsp;size</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_malloc" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.core.ContainerProxy.__init__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__mem.html#ga9722446c5e310ffedfaac9489864796d">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_freep">
+void <code class="descname">av_freep</code><span class="sig-paren">(</span>void<em>&nbsp;*ptr</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_freep" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.frame.AudioFrame" title="av.audio.frame.AudioFrame"><code class="xref py py-class docutils literal"><span class="pre">av.audio.frame.AudioFrame.__dealloc__</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__mem.html#ga0cc84043ea2167ad005c86e11d0bcdba">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_get_bytes_per_sample">
+int <code class="descname">av_get_bytes_per_sample</code><span class="sig-paren">(</span>enum AVSampleFormat<em>&nbsp;sample_fmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_get_bytes_per_sample" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.format.AudioFormat.bits" title="av.audio.format.AudioFormat.bits"><code class="xref py py-attr docutils literal"><span class="pre">av.audio.format.AudioFormat.bits</span></code></a></li>
+<li><a class="reference internal" href="api.html#av.audio.format.AudioFormat.bytes" title="av.audio.format.AudioFormat.bytes"><code class="xref py py-attr docutils literal"><span class="pre">av.audio.format.AudioFormat.bytes</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__sampfmts.html#ga0c3c218e1dd570ad4917c69a35a6c77d">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_samples_get_buffer_size">
+int <code class="descname">av_samples_get_buffer_size</code><span class="sig-paren">(</span>int<em>&nbsp;*linesize</em>, int<em>&nbsp;nb_channels</em>, int<em>&nbsp;nb_samples</em>, enum AVSampleFormat<em>&nbsp;sample_fmt</em>, int<em>&nbsp;align</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_samples_get_buffer_size" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.audio.plane.AudioPlane.__cinit__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__sampfmts.html#gaa7368bc4e3a366b688e81938ed55eb06">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_rescale_q">
+int64_t <code class="descname">av_rescale_q</code><span class="sig-paren">(</span>int64_t<em>&nbsp;a</em>, AVRational<em>&nbsp;bq</em>, AVRational<em>&nbsp;cq</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_rescale_q" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.packet.Packet.stream" title="av.packet.Packet.stream"><code class="xref py py-attr docutils literal"><span class="pre">av.packet.Packet.stream</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__math.html#gaf02994a8bbeaa91d4757df179cbe567f">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_rescale_q_rnd">
+int64_t <code class="descname">av_rescale_q_rnd</code><span class="sig-paren">(</span>int64_t<em>&nbsp;a</em>, AVRational<em>&nbsp;bq</em>, AVRational<em>&nbsp;cq</em>, enum<em>&nbsp;AVRounding</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_rescale_q_rnd" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.packet.Packet.stream" title="av.packet.Packet.stream"><code class="xref py py-attr docutils literal"><span class="pre">av.packet.Packet.stream</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__math.html#gac167a841d10ac919407e77ae35391cf3">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavutil-channel-layout-h">
+<h2><code class="docutils literal"><span class="pre">libavutil/channel_layout.h</span></code><a class="headerlink" href="#libavutil-channel-layout-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.av_get_channel_layout">
+uint64_t <code class="descname">av_get_channel_layout</code><span class="sig-paren">(</span>const char<em>&nbsp;*name</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_get_channel_layout" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.layout.AudioLayout" title="av.audio.layout.AudioLayout"><code class="xref py py-class docutils literal"><span class="pre">av.audio.layout.AudioLayout.__init__</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__channel__mask__c.html#ga3e8a7ab3d4c1ac98b902ab6b00741343">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_get_channel_layout_string">
+void <code class="descname">av_get_channel_layout_string</code><span class="sig-paren">(</span>char<em>&nbsp;*buf</em>, int<em>&nbsp;buf_size</em>, int<em>&nbsp;nb_channels</em>, uint64_t<em>&nbsp;channel_layout</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_get_channel_layout_string" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.layout.AudioLayout.name" title="av.audio.layout.AudioLayout.name"><code class="xref py py-attr docutils literal"><span class="pre">av.audio.layout.AudioLayout.name</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__channel__mask__c.html#ga99d0b5bb80534d13a6cc96336cf9076a">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_channel_layout_extract_channel">
+uint64_t <code class="descname">av_channel_layout_extract_channel</code><span class="sig-paren">(</span>uint64_t<em>&nbsp;channel_layout</em>, int<em>&nbsp;index</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_channel_layout_extract_channel" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.audio.layout.AudioChannel.__cinit__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__channel__mask__c.html#gaf492843360fb4ecee6b5ec4166b04fcd">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_get_channel_name">
+const char * <code class="descname">av_get_channel_name</code><span class="sig-paren">(</span>uint64_t<em>&nbsp;channel</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_get_channel_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">av.audio.layout.AudioChannel.name</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__channel__mask__c.html#gaf9a5e23a9bbf5909f2dc84b25d78e35e">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavutil-dict-h">
+<h2><code class="docutils literal"><span class="pre">libavutil/dict.h</span></code><a class="headerlink" href="#libavutil-dict-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.av_dict_free">
+void <code class="descname">av_dict_free</code><span class="sig-paren">(</span>AVDictionary<em>&nbsp;**m</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_dict_free" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.input.InputContainer.__cinit__</span></code></li>
+<li><code class="xref py py-class docutils literal"><span class="pre">av.dictionary._Dictionary.__dealloc__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__dict.html#ga1bafd682b1fbb90e48a4cc3814b820f7">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.AV_DICT_IGNORE_SUFFIX">
+<code class="descname">AV_DICT_IGNORE_SUFFIX</code><a class="headerlink" href="#c.AV_DICT_IGNORE_SUFFIX" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.dictionary._Dictionary.__iter__()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__dict.html#ga341bbd1ea599dfb0510f419e5272fecc">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_dict_get">
+AVDictionaryEntry * <code class="descname">av_dict_get</code><span class="sig-paren">(</span>const AVDictionary<em>&nbsp;*m</em>, const char<em>&nbsp;*key</em>, const AVDictionaryEntry<em>&nbsp;*prev</em>, int<em>&nbsp;flags</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_dict_get" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.dictionary._Dictionary.__getitem__()</span></code></li>
+<li><code class="xref py py-func docutils literal"><span class="pre">av.dictionary._Dictionary.__iter__()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__dict.html#gae67f143237b2cb2936c9b147aa6dfde3">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_dict_set">
+int <code class="descname">av_dict_set</code><span class="sig-paren">(</span>AVDictionary<em>&nbsp;**pm</em>, const char<em>&nbsp;*key</em>, const char<em>&nbsp;*value</em>, int<em>&nbsp;flags</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_dict_set" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.dictionary._Dictionary.__delitem__()</span></code></li>
+<li><code class="xref py py-func docutils literal"><span class="pre">av.dictionary._Dictionary.__setitem__()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__dict.html#ga8d9c2de72b310cef8e6a28c9cd3acbbe">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_dict_count">
+int <code class="descname">av_dict_count</code><span class="sig-paren">(</span>const AVDictionary<em>&nbsp;*m</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_dict_count" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-func docutils literal"><span class="pre">av.dictionary._Dictionary.__len__()</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__dict.html#gad21456d6601aa096c7c78dce8848d50a">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_dict_copy">
+void <code class="descname">av_dict_copy</code><span class="sig-paren">(</span>AVDictionary<em>&nbsp;**dst</em>, const AVDictionary<em>&nbsp;*src</em>, int<em>&nbsp;flags</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_dict_copy" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.container.input.InputContainer.__cinit__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__dict.html#ga6dabaab2d8a53674db6ffd5ac8de3d9f">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavutil-frame-h">
+<h2><code class="docutils literal"><span class="pre">libavutil/frame.h</span></code><a class="headerlink" href="#libavutil-frame-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.av_frame_alloc">
+AVFrame * <code class="descname">av_frame_alloc</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.av_frame_alloc" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.frame.Frame" title="av.frame.Frame"><code class="xref py py-class docutils literal"><span class="pre">av.frame.Frame.__cinit__</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__frame.html#gac700017c5270c79c1e1befdeeb008b2f">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_frame_free">
+void <code class="descname">av_frame_free</code><span class="sig-paren">(</span>AVFrame<em>&nbsp;**frame</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_frame_free" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.frame.Frame" title="av.frame.Frame"><code class="xref py py-class docutils literal"><span class="pre">av.frame.Frame.__dealloc__</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__frame.html#ga979d73f3228814aee56aeca0636e37cc">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavutil-pixdesc-h">
+<h2><code class="docutils literal"><span class="pre">libavutil/pixdesc.h</span></code><a class="headerlink" href="#libavutil-pixdesc-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.av_get_pix_fmt">
+enum AVPixelFormat <code class="descname">av_get_pix_fmt</code><span class="sig-paren">(</span>const char<em>&nbsp;*name</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_get_pix_fmt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.video.stream.VideoStream.pix_fmt" title="av.video.stream.VideoStream.pix_fmt"><code class="xref py py-attr docutils literal"><span class="pre">av.video.stream.VideoStream.pix_fmt</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/pixdesc_8h.html#a925ef18d69c24c3be8c53d5a7dc0660e">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavutil-rational-h">
+<h2><code class="docutils literal"><span class="pre">libavutil/rational.h</span></code><a class="headerlink" href="#libavutil-rational-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.av_reduce">
+int <code class="descname">av_reduce</code><span class="sig-paren">(</span>int<em>&nbsp;*dst_num</em>, int<em>&nbsp;*dst_den</em>, int64_t<em>&nbsp;num</em>, int64_t<em>&nbsp;den</em>, int64_t<em>&nbsp;max</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_reduce" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.video.stream.VideoStream.display_aspect_ratio" title="av.video.stream.VideoStream.display_aspect_ratio"><code class="xref py py-attr docutils literal"><span class="pre">av.video.stream.VideoStream.display_aspect_ratio</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__math.html#ga4fd9c0b8e663cf3d55e89fbc6ce71602">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libavutil-samplefmt-h">
+<h2><code class="docutils literal"><span class="pre">libavutil/samplefmt.h</span></code><a class="headerlink" href="#libavutil-samplefmt-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.av_get_sample_fmt_name">
+const char * <code class="descname">av_get_sample_fmt_name</code><span class="sig-paren">(</span>enum AVSampleFormat<em>&nbsp;sample_fmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_get_sample_fmt_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.format.AudioFormat.name" title="av.audio.format.AudioFormat.name"><code class="xref py py-attr docutils literal"><span class="pre">av.audio.format.AudioFormat.name</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__sampfmts.html#ga31b9d149b2de9821a65f4f5612970838">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt>
+int <code class="descname">av_get_bytes_per_sample</code><span class="sig-paren">(</span>enum AVSampleFormat<em>&nbsp;sample_fmt</em><span class="sig-paren">)</span></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.format.AudioFormat.bits" title="av.audio.format.AudioFormat.bits"><code class="xref py py-attr docutils literal"><span class="pre">av.audio.format.AudioFormat.bits</span></code></a></li>
+<li><a class="reference internal" href="api.html#av.audio.format.AudioFormat.bytes" title="av.audio.format.AudioFormat.bytes"><code class="xref py py-attr docutils literal"><span class="pre">av.audio.format.AudioFormat.bytes</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__sampfmts.html#ga0c3c218e1dd570ad4917c69a35a6c77d">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_sample_fmt_is_planar">
+int <code class="descname">av_sample_fmt_is_planar</code><span class="sig-paren">(</span>enum AVSampleFormat<em>&nbsp;sample_fmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_sample_fmt_is_planar" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.format.AudioFormat.is_packed" title="av.audio.format.AudioFormat.is_packed"><code class="xref py py-attr docutils literal"><span class="pre">av.audio.format.AudioFormat.is_packed</span></code></a></li>
+<li><a class="reference internal" href="api.html#av.audio.format.AudioFormat.is_planar" title="av.audio.format.AudioFormat.is_planar"><code class="xref py py-attr docutils literal"><span class="pre">av.audio.format.AudioFormat.is_planar</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__sampfmts.html#ga06ba8a64dc4382c422789a5d0b6bf592">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_get_packed_sample_fmt">
+enum AVSampleFormat <code class="descname">av_get_packed_sample_fmt</code><span class="sig-paren">(</span>enum AVSampleFormat<em>&nbsp;sample_fmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_get_packed_sample_fmt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.format.AudioFormat.packed" title="av.audio.format.AudioFormat.packed"><code class="xref py py-attr docutils literal"><span class="pre">av.audio.format.AudioFormat.packed</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__sampfmts.html#ga7817ec0eff4dc6fc0962f31e6d138bca">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.av_get_planar_sample_fmt">
+enum AVSampleFormat <code class="descname">av_get_planar_sample_fmt</code><span class="sig-paren">(</span>enum AVSampleFormat<em>&nbsp;sample_fmt</em><span class="sig-paren">)</span><a class="headerlink" href="#c.av_get_planar_sample_fmt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.format.AudioFormat.planar" title="av.audio.format.AudioFormat.planar"><code class="xref py py-attr docutils literal"><span class="pre">av.audio.format.AudioFormat.planar</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__sampfmts.html#ga82caf838259d95cc6c4fd87633bb0e19">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt>
+int <code class="descname">av_samples_get_buffer_size</code><span class="sig-paren">(</span>int<em>&nbsp;*linesize</em>, int<em>&nbsp;nb_channels</em>, int<em>&nbsp;nb_samples</em>, enum AVSampleFormat<em>&nbsp;sample_fmt</em>, int<em>&nbsp;align</em><span class="sig-paren">)</span></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.audio.plane.AudioPlane.__cinit__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lavu__sampfmts.html#gaa7368bc4e3a366b688e81938ed55eb06">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libswresample-swresample-pyav-h">
+<h2><code class="docutils literal"><span class="pre">libswresample/swresample.pyav.h</span></code><a class="headerlink" href="#libswresample-swresample-pyav-h" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="c.swr_free">
+void <code class="descname">swr_free</code><span class="sig-paren">(</span>struct SwrContext<em>&nbsp;**s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.swr_free" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.resampler.AudioResampler" title="av.audio.resampler.AudioResampler"><code class="xref py py-class docutils literal"><span class="pre">av.audio.resampler.AudioResampler.__dealloc__</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lswr.html#ga818f7d78b1ad7d8d5b70de374b668c34">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.swr_close">
+void <code class="descname">swr_close</code><span class="sig-paren">(</span>struct SwrContext<em>&nbsp;*s</em><span class="sig-paren">)</span><a class="headerlink" href="#c.swr_close" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.audio.resampler.AudioResampler" title="av.audio.resampler.AudioResampler"><code class="xref py py-class docutils literal"><span class="pre">av.audio.resampler.AudioResampler.__dealloc__</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__lswr.html#gaa4bf1048740dfc08d68aba9f1b4db22e">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="libswscale-swscale-h">
+<h2><code class="docutils literal"><span class="pre">libswscale/swscale.h</span></code><a class="headerlink" href="#libswscale-swscale-h" title="Permalink to this headline">¶</a></h2>
+<dl class="var">
+<dt id="c.SWS_CS_ITU709">
+<code class="descname">SWS_CS_ITU709</code><a class="headerlink" href="#c.SWS_CS_ITU709" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.video.frame.VideoFrame.reformat" title="av.video.frame.VideoFrame.reformat"><code class="xref py py-func docutils literal"><span class="pre">av.video.frame.VideoFrame.reformat()</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__libsws.html#gab5d1f9b6f50c155496b358d348ed6f36">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.SWS_CS_FCC">
+<code class="descname">SWS_CS_FCC</code><a class="headerlink" href="#c.SWS_CS_FCC" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.video.frame.VideoFrame.reformat" title="av.video.frame.VideoFrame.reformat"><code class="xref py py-func docutils literal"><span class="pre">av.video.frame.VideoFrame.reformat()</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__libsws.html#gaae1a28de2fd6fdd21a082bcc10ce6cb9">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.SWS_CS_ITU601">
+<code class="descname">SWS_CS_ITU601</code><a class="headerlink" href="#c.SWS_CS_ITU601" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.video.frame.VideoFrame.reformat" title="av.video.frame.VideoFrame.reformat"><code class="xref py py-func docutils literal"><span class="pre">av.video.frame.VideoFrame.reformat()</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__libsws.html#gaf9de144a406b66c68bd29cdcaefaeee5">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.SWS_CS_SMPTE170M">
+<code class="descname">SWS_CS_SMPTE170M</code><a class="headerlink" href="#c.SWS_CS_SMPTE170M" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.video.frame.VideoFrame.reformat" title="av.video.frame.VideoFrame.reformat"><code class="xref py py-func docutils literal"><span class="pre">av.video.frame.VideoFrame.reformat()</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__libsws.html#gac7287919a348578d8452c42c03d65042">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.SWS_CS_SMPTE240M">
+<code class="descname">SWS_CS_SMPTE240M</code><a class="headerlink" href="#c.SWS_CS_SMPTE240M" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.video.frame.VideoFrame.reformat" title="av.video.frame.VideoFrame.reformat"><code class="xref py py-func docutils literal"><span class="pre">av.video.frame.VideoFrame.reformat()</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__libsws.html#ga8a066eae69a34d9d60c73c40628094e4">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.SWS_CS_DEFAULT">
+<code class="descname">SWS_CS_DEFAULT</code><a class="headerlink" href="#c.SWS_CS_DEFAULT" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="api.html#av.video.frame.VideoFrame.reformat" title="av.video.frame.VideoFrame.reformat"><code class="xref py py-func docutils literal"><span class="pre">av.video.frame.VideoFrame.reformat()</span></code></a></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__libsws.html#ga1867c2c57f3c0d18fa72592e30e7d3c2">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.sws_freeContext">
+void <code class="descname">sws_freeContext</code><span class="sig-paren">(</span>struct SwsContext<em>&nbsp;*swsContext</em><span class="sig-paren">)</span><a class="headerlink" href="#c.sws_freeContext" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Referenced by:</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">av.video.reformatter.VideoReformatter.__dealloc__</span></code></li>
+<li><a class="reference external" href="https://ffmpeg.org/doxygen/trunk/group__libsws.html#gad3af0ca76f071dbe0173444db9882932">FFMpeg docs</a></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo-250.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Wrapped C Types and Functions</a><ul>
+<li><a class="reference internal" href="#libavcodec-avcodec-pyav-h"><code class="docutils literal"><span class="pre">libavcodec/avcodec.pyav.h</span></code></a></li>
+<li><a class="reference internal" href="#libavfilter-avfilter-h"><code class="docutils literal"><span class="pre">libavfilter/avfilter.h</span></code></a></li>
+<li><a class="reference internal" href="#libavfilter-avfiltergraph-h"><code class="docutils literal"><span class="pre">libavfilter/avfiltergraph.h</span></code></a></li>
+<li><a class="reference internal" href="#libavfilter-buffersink-h"><code class="docutils literal"><span class="pre">libavfilter/buffersink.h</span></code></a></li>
+<li><a class="reference internal" href="#libavfilter-buffersrc-h"><code class="docutils literal"><span class="pre">libavfilter/buffersrc.h</span></code></a></li>
+<li><a class="reference internal" href="#libavformat-avformat-pyav-h"><code class="docutils literal"><span class="pre">libavformat/avformat.pyav.h</span></code></a></li>
+<li><a class="reference internal" href="#libavutil-audio-fifo-h"><code class="docutils literal"><span class="pre">libavutil/audio_fifo.h</span></code></a></li>
+<li><a class="reference internal" href="#libavutil-avutil-pyav-h"><code class="docutils literal"><span class="pre">libavutil/avutil.pyav.h</span></code></a></li>
+<li><a class="reference internal" href="#libavutil-channel-layout-h"><code class="docutils literal"><span class="pre">libavutil/channel_layout.h</span></code></a></li>
+<li><a class="reference internal" href="#libavutil-dict-h"><code class="docutils literal"><span class="pre">libavutil/dict.h</span></code></a></li>
+<li><a class="reference internal" href="#libavutil-frame-h"><code class="docutils literal"><span class="pre">libavutil/frame.h</span></code></a></li>
+<li><a class="reference internal" href="#libavutil-pixdesc-h"><code class="docutils literal"><span class="pre">libavutil/pixdesc.h</span></code></a></li>
+<li><a class="reference internal" href="#libavutil-rational-h"><code class="docutils literal"><span class="pre">libavutil/rational.h</span></code></a></li>
+<li><a class="reference internal" href="#libavutil-samplefmt-h"><code class="docutils literal"><span class="pre">libavutil/samplefmt.h</span></code></a></li>
+<li><a class="reference internal" href="#libswresample-swresample-pyav-h"><code class="docutils literal"><span class="pre">libswresample/swresample.pyav.h</span></code></a></li>
+<li><a class="reference internal" href="#libswscale-swscale-h"><code class="docutils literal"><span class="pre">libswscale/swscale.h</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="hacking.html"
+                        title="previous chapter">Hacking on PyAV</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/includes.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hacking.html" title="Hacking on PyAV"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyAV 0.3,2 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2012, Mike Boers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
+    </div>
+  </body>
+</html>
