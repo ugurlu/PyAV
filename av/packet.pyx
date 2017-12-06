@@ -139,6 +139,7 @@ cdef class Packet(Buffer):
                 self.struct.pts = lib.AV_NOPTS_VALUE
             else:
                 self.struct.pts = v
+
     property dts:
         def __get__(self):
             if self.struct.dts != lib.AV_NOPTS_VALUE:
