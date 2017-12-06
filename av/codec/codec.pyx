@@ -1,22 +1,47 @@
 from libc.stdint cimport uint64_t
 
-from av.utils cimport media_type_to_string
-from av.video.format cimport get_video_format
+from warnings import warn
+
+from av.audio.format cimport get_audio_format
 from av.descriptor cimport wrap_avclass
+from av.utils cimport flag_in_bitfield, media_type_to_string
+from av.video.format cimport get_video_format
 
 cdef object _cinit_sentinel = object()
 
 
-cdef flag_in_bitfield(uint64_t bitfield, uint64_t flag):
-    # Not every flag exists in every version of FFMpeg and LibAV, so we
-    # define them to 0.
-    if not flag:
-        return None
-    return bool(bitfield & flag)
+
+cdef Codec wrap_codec(lib.AVCodec *ptr):
+    cdef Codec codec = Codec(_cinit_sentinel)
+    codec.ptr = ptr
+    codec.is_encoder = lib.av_codec_is_encoder(ptr)
+    codec._init()
+    return codec
+
+
+class UnknownCodecError(ValueError):
+    pass
 
 
 cdef class Codec(object):
-    
+
+    """A single encoding or decoding codec.
+
+    This object exposes information about an availible codec, and an avenue to
+    create a :class:`.CodecContext` to encode/decode directly.
+
+    ::
+
+        >>> codec = Codec('mpeg4', 'r')
+        >>> codec.name
+        'mpeg4'
+        >>> codec.type
+        'video'
+        >>> codec.is_encoder
+        False
+
+    """
+
     def __cinit__(self, name, mode='r'):
 
         if name is _cinit_sentinel:
@@ -24,22 +49,35 @@ cdef class Codec(object):
 
         if mode == 'w':
             self.ptr = lib.avcodec_find_encoder_by_name(name)
-            self.is_encoder = True
         elif mode == 'r':
             self.ptr = lib.avcodec_find_decoder_by_name(name)
-            self.is_encoder = False
         else:
-            raise ValueError('invalid mode; must be "r" or "w"', mode)
+            raise ValueError('Invalid mode; must be "r" or "w".', mode)
+
+        self._init(name)
+
+    cdef _init(self, name=None):
 
         if not self.ptr:
-            raise ValueError('no codec %r' % name)
+            raise UnknownCodecError(name)
 
         self.desc = lib.avcodec_descriptor_get(self.ptr.id)
         if not self.desc:
-            raise RuntimeError('no descriptor for %r' % name) 
+            raise RuntimeError('No codec descriptor for %r.' % name)
+
+        self.is_encoder = lib.av_codec_is_encoder(self.ptr)
+
+        # Sanity check.
+        if self.is_encoder and lib.av_codec_is_decoder(self.ptr):
+            warn('%s is both encoder and decoder. Please notify PyAV developers.')
+
+    def create(self):
+        from .context import CodecContext
+        return CodecContext.create(self)
 
     property is_decoder:
-        def __get__(self): return not self.is_encoder
+        def __get__(self):
+            return not self.is_encoder
 
     property descriptor:
         def __get__(self): return wrap_avclass(self.ptr.priv_class)
@@ -69,11 +107,21 @@ cdef class Codec(object):
             while ptr[0] != -1:
                 ret.append(get_video_format(ptr[0], 0, 0))
                 ptr += 1
-
             return ret
 
     property audio_formats:
-        def __get__(self): return <int>self.ptr.sample_fmts
+       def __get__(self):
+
+           if not self.ptr.sample_fmts:
+               return
+
+           ret = []
+           cdef lib.AVSampleFormat *ptr = self.ptr.sample_fmts
+           while ptr[0] != -1:
+               ret.append(get_audio_format(ptr[0]))
+               ptr += 1
+           return ret
+
 
     # Capabilities.
     property draw_horiz_band:
@@ -136,18 +184,14 @@ cdef class Codec(object):
         def __get__(self): return flag_in_bitfield(self.desc.props, lib.AV_CODEC_PROP_TEXT_SUB)
 
 
-cdef class CodecContext(object):
-
-    def __cinit__(self, x):
-        if x is not _cinit_sentinel:
-            raise RuntimeError('cannot instantiate CodecContext')
-
-
-codecs_availible = set()
+codecs_available = set()
 cdef lib.AVCodec *ptr = lib.av_codec_next(NULL)
 while ptr:
-    codecs_availible.add(ptr.name)
+    codecs_available.add(ptr.name)
     ptr = lib.av_codec_next(ptr)
+
+
+codec_descriptor = wrap_avclass(lib.avcodec_get_class())
 
 
 def dump_codecs():
@@ -164,16 +208,21 @@ def dump_codecs():
  .....S = Lossless compression
  ------'''
 
-    for name in sorted(codecs_availible):
+    for name in sorted(codecs_available):
+
         try:
             e_codec = Codec(name, 'w')
         except ValueError:
             e_codec = None
+
         try:
             d_codec = Codec(name, 'r')
         except ValueError:
             d_codec = None
+
+        # TODO: Assert these always have the same properties.
         codec = e_codec or d_codec
+
         print ' %s%s%s%s%s%s %-18s %s' % (
             '.D'[bool(d_codec)],
             '.E'[bool(e_codec)],
@@ -184,4 +233,3 @@ def dump_codecs():
             codec.name,
             codec.long_name
         )
-
